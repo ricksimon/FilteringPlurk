@@ -7,12 +7,8 @@ import android.content.SharedPreferences;
  * Created by Simon on 2017/10/26.
  */
 
-public class PlurkConfig {
-    //for calling APIs
-    public static final String APIKey = "APP KEY HERE";
-    //for OAuth process
-    public static final String APISecret = "APP SECRET HERE";
-
+public class UserInfo {
+    //shared preference args
     private static final String SHARED_PREFERENCE_ROOT = "cc.ricksimon.android.filteringplurk.SHAREDPREFERENCE";
     private static final String KEY_USER_ACCESS_TOKEN = "userAccessToken";
     private static final String KEY_USER_TOKEN_SECRET = "userTokenSecret";

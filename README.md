@@ -2,4 +2,6 @@
 A simple Android project for filter unwanted message on Plurk
 
 ## Used Library
-Plurk API: jplurk-oauth https://github.com/qrtt1/jplurk-oauth
+scribejava: https://github.com/scribejava/scribejava/
+
+OkHttp: http://square.github.io/okhttp/

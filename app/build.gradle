@@ -28,9 +28,9 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
 
-    //Plurk library
-    compile ('com.google.jplurk:jplurk-oauth:2.0.20'){
-            exclude group: 'org.json', module: 'json'
-            exclude group: 'commons-logging', module: 'commons-logging'
-    }
+    //scribejava
+    compile 'com.github.scribejava:scribejava-apis:4.1.1'
+    //okhttp
+    compile 'com.squareup.okhttp3:okhttp:3.9.0'
+
 }
