@@ -4,13 +4,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import cc.ricksimon.android.filteringplurk.R;
-import cc.ricksimon.android.filteringplurk.data.UserInfo;
-import cc.ricksimon.android.filteringplurk.utils.Log;
+import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthUserInfo;
 import cc.ricksimon.android.filteringplurk.utils.Util;
 
 public class MainActivity extends BaseActivity {
@@ -37,10 +33,10 @@ public class MainActivity extends BaseActivity {
 
             @Override
             protected void onPostExecute(Object o) {
-                if(!UserInfo.userLoggedIn(MainActivity.this)) {
+                if(!PlurkOAuthUserInfo.userLoggedIn(MainActivity.this)) {
                     startActivity(new Intent(MainActivity.this, AuthorizeActivity.class));
                 }else{
-
+                    //TODO: go timeline page
                 }
             }
         };

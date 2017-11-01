@@ -3,6 +3,9 @@ package cc.ricksimon.android.filteringplurk.utils;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.oauth.OAuth10aService;
 
+import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthApi;
+import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthParameter;
+
 /**
  * Created by Simon on 2017/11/1.
  */

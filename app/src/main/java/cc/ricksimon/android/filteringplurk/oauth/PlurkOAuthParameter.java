@@ -1,21 +1,11 @@
-package cc.ricksimon.android.filteringplurk.utils;
+package cc.ricksimon.android.filteringplurk.oauth;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Base64;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
 import java.util.UUID;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
-import cc.ricksimon.android.filteringplurk.data.UserInfo;
+import cc.ricksimon.android.filteringplurk.utils.SharedPreferenceDefinition;
 
 /**
  * Created by Simon on 2017/10/31.

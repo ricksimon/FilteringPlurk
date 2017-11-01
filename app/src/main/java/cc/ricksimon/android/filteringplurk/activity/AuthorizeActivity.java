@@ -18,9 +18,9 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import cc.ricksimon.android.filteringplurk.R;
-import cc.ricksimon.android.filteringplurk.data.UserInfo;
-import cc.ricksimon.android.filteringplurk.utils.PlurkOAuthApi;
-import cc.ricksimon.android.filteringplurk.utils.PlurkOAuthParameter;
+import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthUserInfo;
+import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthApi;
+import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthParameter;
 import cc.ricksimon.android.filteringplurk.utils.Util;
 
 /**
@@ -171,8 +171,7 @@ public class AuthorizeActivity extends BaseActivity {
             @Override
             protected void onPostExecute(Object o) {
                 if(accessToken != null) {
-                    UserInfo.setUserAccessToken(mActivity, accessToken.getToken());
-                    UserInfo.setUserTokenSecret(mActivity, accessToken.getTokenSecret());
+                    PlurkOAuthUserInfo.setAccessToken(mActivity, accessToken);
                     finish();
                 }
             }

@@ -1,4 +1,4 @@
-package cc.ricksimon.android.filteringplurk.utils;
+package cc.ricksimon.android.filteringplurk.oauth;
 
 import com.github.scribejava.core.builder.api.DefaultApi10a;
 import com.github.scribejava.core.model.OAuth1RequestToken;
