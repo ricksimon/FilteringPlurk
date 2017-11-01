@@ -1,5 +1,7 @@
 package cc.ricksimon.android.filteringplurk.utils;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Base64;
 
 import java.io.UnsupportedEncodingException;
@@ -8,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.UUID;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -25,8 +28,25 @@ public class PlurkOAuthParameter {
     public static final String APP_SECRET = "";
     public static final String OAUTH_CALLBACK = "";
 
-    //OAuth paths
-    public static final String PLURK_OAUTH_AUTHORIZATION_PATH = "https://www.plurk.com/m/authorize?oauth_token=%s";
+    //OAuth
+    public static final String PLURK_LOGIN_PAGE = "https://www.plurk.com/m/login";
+    public static final String PLURK_OAUTH_AUTHORIZATION_PATH_ROOT = "https://www.plurk.com/m/authorize";
+
+    public static final String PLURK_OAUTH_SIMPLE_AUTH_PATH = PLURK_OAUTH_AUTHORIZATION_PATH_ROOT + "?oauth_token=%s";
+    public static final String PLURK_OAUTH_FULL_AUTH_PATH   = PLURK_OAUTH_AUTHORIZATION_PATH_ROOT + "?oauth_token=%s&deviceid=%s&model=%s";
+
     public static final String PLURK_OAUTH_REQUEST_TOKEN_PATH = "https://www.plurk.com/OAuth/request_token";
     public static final String PLURK_OAUTH_ACCESS_TOKEN_PATH = "https://www.plurk.com/OAuth/access_token";
+
+    public static String getUUID(Context context){
+        SharedPreferences s = context.getSharedPreferences(SharedPreferenceDefinition.SHARED_PREFERENCE_ROOT,Context.MODE_PRIVATE);
+
+        String uuid = s.getString(SharedPreferenceDefinition.KEY_UUID,null);
+        if(uuid == null || uuid.isEmpty()){
+            uuid = UUID.randomUUID().toString();
+            s.edit().putString(SharedPreferenceDefinition.KEY_UUID,uuid).commit();
+        }
+
+        return uuid;
+    }
 }

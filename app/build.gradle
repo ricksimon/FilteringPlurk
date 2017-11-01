@@ -5,7 +5,7 @@ android {
     buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "cc.ricksimon.android.filteringplurk"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -32,5 +32,7 @@ dependencies {
     compile 'com.github.scribejava:scribejava-apis:4.1.1'
     //okhttp
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
+    //androiddevicenames
+    compile 'com.jaredrummler:android-device-names:1.1.5'
 
 }

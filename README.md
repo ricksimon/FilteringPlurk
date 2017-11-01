@@ -5,3 +5,5 @@ A simple Android project for filter unwanted message on Plurk
 scribejava: https://github.com/scribejava/scribejava/
 
 OkHttp: http://square.github.io/okhttp/
+
+AndroidDeviceNames: https://github.com/jaredrummler/AndroidDeviceNames

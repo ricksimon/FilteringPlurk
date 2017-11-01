@@ -32,6 +32,10 @@ public class PlurkOAuthApi extends DefaultApi10a {
 
     @Override
     public String getAuthorizationUrl(OAuth1RequestToken requestToken) {
-        return String.format(PlurkOAuthParameter.PLURK_OAUTH_AUTHORIZATION_PATH, requestToken.getToken());
+        return String.format(PlurkOAuthParameter.PLURK_OAUTH_SIMPLE_AUTH_PATH, requestToken.getToken());
+    }
+
+    public static String getAuthorizationUrlWithDeviceIdAndModel(OAuth1RequestToken requestToken, String deviceId, String model) {
+        return String.format(PlurkOAuthParameter.PLURK_OAUTH_FULL_AUTH_PATH, requestToken.getToken(), deviceId, model);
     }
 }

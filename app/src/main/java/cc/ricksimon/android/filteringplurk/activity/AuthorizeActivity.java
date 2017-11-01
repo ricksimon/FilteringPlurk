@@ -4,73 +4,73 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.github.scribejava.core.builder.ServiceBuilder;
+import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.OAuth1RequestToken;
-import com.github.scribejava.core.oauth.OAuth10aService;
+import com.jaredrummler.android.device.DeviceName;
 
 import java.io.IOException;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
-import cc.ricksimon.android.filteringplurk.utils.Log;
+import cc.ricksimon.android.filteringplurk.R;
+import cc.ricksimon.android.filteringplurk.data.UserInfo;
 import cc.ricksimon.android.filteringplurk.utils.PlurkOAuthApi;
 import cc.ricksimon.android.filteringplurk.utils.PlurkOAuthParameter;
+import cc.ricksimon.android.filteringplurk.utils.Util;
 
 /**
  * Created by Simon on 2017/10/31.
  */
 
-public class AuthorizeActivity extends AppCompatActivity {
+public class AuthorizeActivity extends BaseActivity {
 
     //OAuth Params
-    private OAuth10aService service = null;
     private OAuth1RequestToken requestToken = null;
     private String verifier = null;
 
+    //device info
+    private DeviceName.DeviceInfo deviceInfo = null;
 
+    private AuthorizeActivity mActivity = null;
     private WebView webView = null;
+
+    private static final boolean withDetailInfo = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        initOAuth10aService();
+        mActivity = this;
 
-        webView = new WebView(this);
-
-        setupWebView();
-        setContentView(webView);
+        initial();
+        setUpView();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        getTokenAndLoadWebView();
+        startGetRequestTokenAndLoadWebViewTask();
     }
 
-    private void initOAuth10aService(){
-        if(Log.PRINT_LOG){
-            service = new ServiceBuilder()
-                    .apiKey(PlurkOAuthParameter.APP_KEY)
-                    .apiSecret(PlurkOAuthParameter.APP_SECRET)
-                    .callback(PlurkOAuthParameter.OAUTH_CALLBACK)
-                    .debug()
-                    .build(PlurkOAuthApi.instance());
-        }else {
-            service = new ServiceBuilder()
-                    .apiKey(PlurkOAuthParameter.APP_KEY)
-                    .apiSecret(PlurkOAuthParameter.APP_SECRET)
-                    .callback(PlurkOAuthParameter.OAUTH_CALLBACK)
-                    .build(PlurkOAuthApi.instance());
-        }
+    private void initial(){
+        initWebView();
+        getDeviceInfoInBackground();
     }
 
-    private void setupWebView(){
+    private void setUpView(){
+        webView.setVisibility(View.INVISIBLE);
+        setContentView(R.layout.progress_dialog);
+    }
+
+    private void initWebView(){
+        webView = new WebView(this);
+
         //enable javascript
         webView.getSettings().setJavaScriptEnabled(true);
 
@@ -79,25 +79,56 @@ public class AuthorizeActivity extends AppCompatActivity {
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                if(url.startsWith(PlurkOAuthParameter.OAUTH_CALLBACK)){
-                    parseVerifier(url);
+                if(url.startsWith(PlurkOAuthParameter.PLURK_LOGIN_PAGE)){
+                    if(webView.getVisibility() != View.VISIBLE) {
+                        webView.setVisibility(View.VISIBLE);
+                        setContentView(webView);
+                    }
+                    return;
+                }
+                if(url.startsWith(PlurkOAuthParameter.PLURK_OAUTH_AUTHORIZATION_PATH_ROOT)){
+                    if(webView.getVisibility() != View.VISIBLE) {
+                        webView.setVisibility(View.VISIBLE);
+                        setContentView(webView);
+                    }
+                    return;
                 }
 
-                if(verifier != null && !verifier.isEmpty()){
-                    //TODO: continue authorization
+                if(url.startsWith(PlurkOAuthParameter.OAUTH_CALLBACK)){
+                    parseVerifier(url);
+
+                    if(verifier != null && !verifier.isEmpty()){
+                        webView.setVisibility(View.INVISIBLE);
+                        setContentView(R.layout.progress_dialog);
+
+                        startGetAccessTokenTask();
+
+                        webView.clearCache(true);
+                        //clear cookies
+                        CookieManager.getInstance().removeSessionCookies(null);
+                    }
                 }
             }
         });
     }
 
-    private void getTokenAndLoadWebView(){
-        AsyncTask getReqTokenAndLoad = new AsyncTask() {
+    private void getDeviceInfoInBackground(){
+        DeviceName.with(mActivity).request(new DeviceName.Callback() {
+            @Override
+            public void onFinished(DeviceName.DeviceInfo info, Exception error) {
+                deviceInfo = info;
+            }
+        });
+    }
+
+    private void startGetRequestTokenAndLoadWebViewTask(){
+        AsyncTask task = new AsyncTask() {
             @Override
             protected String doInBackground(Object[] params) {
                 String url = "";
                 try {
-                    requestToken = service.getRequestToken();
-                    url = service.getAuthorizationUrl(requestToken);
+                    requestToken = Util.getService().getRequestToken();
+                    url = obtainAuthURL();
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -116,7 +147,38 @@ public class AuthorizeActivity extends AppCompatActivity {
             }
         };
 
-        getReqTokenAndLoad.execute();
+        task.execute();
+    }
+
+    private void startGetAccessTokenTask(){
+        AsyncTask task = new AsyncTask() {
+            private OAuth1AccessToken accessToken = null;
+
+            @Override
+            protected Object doInBackground(Object[] params) {
+                try {
+                    accessToken = Util.getService().getAccessToken(requestToken, verifier);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                if(accessToken != null) {
+                    UserInfo.setUserAccessToken(mActivity, accessToken.getToken());
+                    UserInfo.setUserTokenSecret(mActivity, accessToken.getTokenSecret());
+                    finish();
+                }
+            }
+        };
+
+        task.execute();
     }
 
     private void parseVerifier(String url){
@@ -126,5 +188,23 @@ public class AuthorizeActivity extends AppCompatActivity {
         if(args.contains("oauth_verifier")){
             verifier = uri.getQueryParameter("oauth_verifier");
         }
+    }
+
+    private String obtainAuthURL(){
+        if(withDetailInfo){
+            return PlurkOAuthApi.getAuthorizationUrlWithDeviceIdAndModel(requestToken, PlurkOAuthParameter.getUUID(mActivity), obtainDeviceName());
+        }else{
+            return Util.getService().getAuthorizationUrl(requestToken);
+        }
+    }
+
+    private String obtainDeviceName(){
+        String deviceName = DeviceName.getDeviceName();
+        if(deviceInfo != null){
+            deviceName = deviceInfo.manufacturer + " " + deviceInfo.marketName + " (" + deviceInfo.model + ")";
+        }
+        deviceName = deviceName.replace(" ", "+");
+
+        return deviceName;
     }
 }
