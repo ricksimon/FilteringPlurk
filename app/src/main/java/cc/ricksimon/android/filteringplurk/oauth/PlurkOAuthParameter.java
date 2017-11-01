@@ -19,14 +19,18 @@ public class PlurkOAuthParameter {
     public static final String OAUTH_CALLBACK = "";
 
     //OAuth
-    public static final String PLURK_LOGIN_PAGE = "https://www.plurk.com/m/login";
-    public static final String PLURK_OAUTH_AUTHORIZATION_PATH_ROOT = "https://www.plurk.com/m/authorize";
+    public static final String PLURK_ROOT = "https://www.plurk.com";
+
+    public static final String PLURK_LOGIN_PAGE = PLURK_ROOT + "/m/login";
+    public static final String PLURK_OAUTH_AUTHORIZATION_PATH_ROOT = PLURK_ROOT + "/m/authorize";
 
     public static final String PLURK_OAUTH_SIMPLE_AUTH_PATH = PLURK_OAUTH_AUTHORIZATION_PATH_ROOT + "?oauth_token=%s";
-    public static final String PLURK_OAUTH_FULL_AUTH_PATH   = PLURK_OAUTH_AUTHORIZATION_PATH_ROOT + "?oauth_token=%s&deviceid=%s&model=%s";
+    public static final String PLURK_OAUTH_FULL_AUTH_PATH   = PLURK_OAUTH_SIMPLE_AUTH_PATH                            + "&deviceid=%s&model=%s";
 
-    public static final String PLURK_OAUTH_REQUEST_TOKEN_PATH = "https://www.plurk.com/OAuth/request_token";
-    public static final String PLURK_OAUTH_ACCESS_TOKEN_PATH = "https://www.plurk.com/OAuth/access_token";
+    public static final String PLURK_OAUTH_REQUEST_TOKEN_PATH = PLURK_ROOT + "/OAuth/request_token";
+    public static final String PLURK_OAUTH_ACCESS_TOKEN_PATH = PLURK_ROOT + "/OAuth/access_token";
+
+    public static final String PLURK_API_ROOT = PLURK_ROOT + "/APP";
 
     public static String getUUID(Context context){
         SharedPreferences s = context.getSharedPreferences(SharedPreferenceDefinition.SHARED_PREFERENCE_ROOT,Context.MODE_PRIVATE);
