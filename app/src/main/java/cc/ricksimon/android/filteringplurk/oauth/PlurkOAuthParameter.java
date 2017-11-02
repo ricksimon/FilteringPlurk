@@ -30,8 +30,6 @@ public class PlurkOAuthParameter {
     public static final String PLURK_OAUTH_REQUEST_TOKEN_PATH = PLURK_ROOT + "/OAuth/request_token";
     public static final String PLURK_OAUTH_ACCESS_TOKEN_PATH = PLURK_ROOT + "/OAuth/access_token";
 
-    public static final String PLURK_API_ROOT = PLURK_ROOT + "/APP";
-
     public static String getUUID(Context context){
         SharedPreferences s = context.getSharedPreferences(SharedPreferenceDefinition.SHARED_PREFERENCE_ROOT,Context.MODE_PRIVATE);
 
