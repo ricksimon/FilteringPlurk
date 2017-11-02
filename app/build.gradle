@@ -34,5 +34,4 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
     //androiddevicenames
     compile 'com.jaredrummler:android-device-names:1.1.5'
-
 }

@@ -9,19 +9,17 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 
-/*
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.multipart.FilePart;
-import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
-import org.apache.commons.httpclient.methods.multipart.Part;
-import com.github.scribejava.core.utils.URLUtils;
-*/
 import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth10aService;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.multipart.FilePart;
+import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.Part;
 
 import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthUserInfo;
 import cc.ricksimon.android.filteringplurk.utils.Log;
@@ -123,8 +121,7 @@ public class PlurkOAuth {
     }
 
     private String uploadFile(OAuthRequest request, String parameterName, File file) throws RequestException {
-        return "";
-        /*
+        //TODO: rewrite to OkHttp version
         HttpClient httpClient = new HttpClient();
         Map<String, String> params = request.getOauthParameters();
         String url = URLUtils.appendParametersToQueryString(request.getUrl(), params);
@@ -147,26 +144,5 @@ public class PlurkOAuth {
             post.releaseConnection();
         }
         return body;
-        */
     }
-
-    /*
-    public static class PlurkOAuthBuilder {
-        public static PlurkOAuth builderFromEnv(Context context) {
-            return new PlurkOAuth(
-                    value("appKey"),
-                    value("appSecret"),
-                    value("token"),
-                    value("tokenSecret"));
-        }
-
-        private static String value(String key) {
-            String value = System.getenv(key);
-            if (value == null || value.trim().isEmpty()) {
-                throw new IllegalArgumentException("cannot find the variable[" + key + "] in environment variables");
-            }
-            return value;
-        }
-    }
-    */
 }
