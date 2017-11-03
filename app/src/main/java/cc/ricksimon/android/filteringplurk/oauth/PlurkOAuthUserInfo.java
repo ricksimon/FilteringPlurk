@@ -48,7 +48,7 @@ public class PlurkOAuthUserInfo {
         return (accessToken != null && !accessToken.isEmpty() && tokenSecret!= null && !tokenSecret.isEmpty());
     }
 
-    public static void logOut(Context context){
+    public static void clearAccessToken(Context context){
         setAccessToken(context,null);
     }
 }

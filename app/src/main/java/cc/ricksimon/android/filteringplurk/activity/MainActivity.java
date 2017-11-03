@@ -10,6 +10,8 @@ import com.google.jplurk_oauth.skeleton.PlurkOAuth;
 
 import org.json.JSONObject;
 
+import java.util.Iterator;
+
 import cc.ricksimon.android.filteringplurk.R;
 import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthUserInfo;
 import cc.ricksimon.android.filteringplurk.utils.Log;
@@ -59,7 +61,7 @@ public class MainActivity extends BaseActivity {
             protected Object doInBackground(Object[] params) {
                 PlurkOAuth auth = new PlurkOAuth(MainActivity.this);
                 try{
-                    JSONObject jo = auth.using(Users.class).getKarmaStats();
+                    JSONObject jo = auth.using(Users.class).currUser();
                     Log.e(TAG,jo.toString());
                 }catch(Exception e){
                     e.printStackTrace();
