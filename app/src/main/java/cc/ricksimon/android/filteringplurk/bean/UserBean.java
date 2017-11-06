@@ -7,6 +7,75 @@ import org.json.JSONObject;
  * Created by Simon on 2017/11/3.
  */
 
+/*
+ * id: The unique user id.
+ * nick_name: The unique nick_name of the user, for example amix.
+ * display_name: The non-unique display name of the user, for example Amir S. Only set if it's non empty.
+ * premium: Boolean on whether the user currently has plurk coins.
+ * has_profile_image: If 1 then the user has a profile picture, otherwise the user should use the default.
+ * avatar: Specifies what the latest avatar (profile picture) version is.
+ * location: The user's location, a text string, for example Aarhus Denmark.
+ * default_lang: The user's profile language.
+ * date_of_birth: The user's birthday. Note that the birthday is always stored in UTC timezone. You should not convert it to local time zone, otherwise you may get the wrong date of user's birthday.
+ * bday_privacy: 0: hide birthday, 1: show birth date but not birth year, 2: show all
+ * full_name: The user's full name, like Amir Salihefendic.
+ * gender: 1 is male, 0 is female, 2 is not stating/other.
+ * karma: User's karma value.
+ * recruited: How many friends has the user recruited.
+ * relationship: Can be not_saying, single, married, divorced, engaged, in_relationship, complicated, widowed, unstable_relationship, open_relationship
+ */
+
+/* example
+ * {
+ * "verified_account":false,
+ * "avatar_small":URL,
+ * "badges":[STRING ARRAY],
+ * "fans_count":INT,
+ * "profile_views":INT,
+ * "display_name":STRING,
+ * "privacy":"world",
+ * "show_ads":false,
+ * "background_id":0,
+ * "name_color":"86CA6F",
+ * "location":STRING,
+ * "recruited":INT,
+ * "setup_weibo_sync":false,
+ * "premium":true,
+ * "avatar_big":URL,
+ * "dateformat":0,
+ * "has_profile_image":1,
+ * "response_count":INT,
+ * "timeline_privacy":0,
+ * "nick_name":STRING,
+ * "gender":1,
+ * "filter_porn":null,
+ * "avatar":50,
+ * "page_title":STRING,
+ * "show_location":1,
+ * "plurks_count":INT,
+ * "full_name":STRING,
+ * "timezone":"UTC",
+ * "id":LONG,
+ * "relationship":"single",
+ * "setup_twitter_sync":false,
+ * "friends_count":INT,
+ * "post_anonymous_plurk":false,
+ * "accept_private_plurk_from":"all",
+ * "avatar_medium":URL,
+ * "creature_url":URL,
+ * "pinned_plurk_id":null,
+ * "bday_privacy":2,
+ * "default_lang":"tr_ch",
+ * "setup_facebook_sync":false,
+ * "link_facebook":false,
+ * "date_of_birth":STRING,
+ * "filter_anonymous":0,
+ * "about":STRING,
+ * "karma":100,
+ * "filter_keywords":null
+ * }
+ */
+
 public class UserBean {
     public enum BDayPrivacy{
         HIDE_BIRTHDAY(0),
@@ -64,7 +133,7 @@ public class UserBean {
     private static final String KEY_RECRUITED = "recruited";
     private static final String KEY_RELATIONSHIP = "relationship";
 
-    private int id = 0;
+    private long id = 0;
     private String nickName = null;
     private String displayName = null;
     private boolean premium = false;
@@ -80,7 +149,7 @@ public class UserBean {
     private int recruited = 0;
     private String relationship = null;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
     public String getNickName() {
@@ -126,7 +195,7 @@ public class UserBean {
         return relationship;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
     public void setNickName(String nickName) {
