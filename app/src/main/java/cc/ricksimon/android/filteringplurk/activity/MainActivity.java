@@ -64,7 +64,7 @@ public class MainActivity extends BaseActivity {
                     try {
                         if(TokenBean.parseTokenBean((JSONObject) o).isValid(MainActivity.this)){
                             //TODO: go timeline page
-//                            test();
+                            test();
                             return;
                         }
                     }catch (Exception e){
@@ -84,12 +84,8 @@ public class MainActivity extends BaseActivity {
         AsyncTask task = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] params) {
-                PlurkOAuth auth = new PlurkOAuth(MainActivity.this);
-
-                JSONObject jo = null;
-
                 try{
-                    jo = auth.using(Users.class).currUser();
+                    JSONObject jo = Util.getAuth(MainActivity.this).using(Users.class).currUser();
                     Log.e(TAG,jo.toString());
                 }catch(Exception e){
                     e.printStackTrace();
