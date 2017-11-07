@@ -39,7 +39,7 @@ public class PlurkOAuthUserInfo {
         editor.commit();
     }
 
-    public static boolean userLoggedIn(Context context){
+    public static boolean hasAccessToken(Context context){
         OAuth1AccessToken token = getAccessToken(context);
 
         String accessToken = token.getToken();

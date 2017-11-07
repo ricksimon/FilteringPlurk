@@ -51,6 +51,10 @@ public class PlurkOAuth {
         this.token = PlurkOAuthUserInfo.getAccessToken(context);
     }
 
+    public static void clearCachedModule(){
+        cachedModule.clear();
+    }
+
     public String sendRequest(String url, Args args, HttpMethod method) throws RequestException, InterruptedException, ExecutionException, IOException {
         OAuthRequest request = new OAuthRequest(actionMap.get(method), url);
         Log.i(TAG,String.format("%1$s %2$s\t%3$s", method, url, args.map));

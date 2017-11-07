@@ -1,5 +1,6 @@
 package cc.ricksimon.android.filteringplurk.activity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -172,6 +173,7 @@ public class AuthorizeActivity extends BaseActivity {
             protected void onPostExecute(Object o) {
                 if(accessToken != null) {
                     PlurkOAuthUserInfo.setAccessToken(mActivity, accessToken);
+                    Util.plurkOAuthTokenChanged();
                     finish();
                 }
             }
