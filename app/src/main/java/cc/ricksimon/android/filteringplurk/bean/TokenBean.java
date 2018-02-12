@@ -11,7 +11,12 @@ import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthParameter;
  * Created by Simon on 2017/11/7.
  */
 
-public class TokenBean {
+public class TokenBean extends BaseBean {
+
+    @Override
+    public void setBeanType() {
+        setBeanType(TokenBean.class.getSimpleName());
+    }
 
     private static final String KEY_APP_ID = "app_id";
     private static final String KEY_USER_ID = "user_id";
@@ -58,6 +63,7 @@ public class TokenBean {
     }
 
     private TokenBean(){
+        setBeanType();
     }
 
     public static TokenBean parseTokenBean(JSONObject jsonObject) throws JSONException {

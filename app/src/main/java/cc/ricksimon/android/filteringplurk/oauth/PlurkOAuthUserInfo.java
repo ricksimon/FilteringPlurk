@@ -42,6 +42,10 @@ public class PlurkOAuthUserInfo {
     public static boolean hasAccessToken(Context context){
         OAuth1AccessToken token = getAccessToken(context);
 
+        if(token == null){
+            return false;
+        }
+
         String accessToken = token.getToken();
         String tokenSecret = token.getTokenSecret();
 

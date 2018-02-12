@@ -1,6 +1,5 @@
 package cc.ricksimon.android.filteringplurk.activity;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,9 +13,7 @@ import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.OAuth1RequestToken;
 import com.jaredrummler.android.device.DeviceName;
 
-import java.io.IOException;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 
 import cc.ricksimon.android.filteringplurk.R;
 import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthUserInfo;
@@ -123,61 +120,13 @@ public class AuthorizeActivity extends BaseActivity {
     }
 
     private void startGetRequestTokenAndLoadWebViewTask(){
-        AsyncTask task = new AsyncTask() {
-            @Override
-            protected String doInBackground(Object[] params) {
-                String url = "";
-                try {
-                    requestToken = Util.getService().getRequestToken();
-                    url = obtainAuthURL();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-                return url;
-            }
-
-            @Override
-            protected void onPostExecute(Object o) {
-                if(o.getClass().getSimpleName().equals("String")){
-                    webView.loadUrl((String)o);
-                }
-            }
-        };
+        GetRequestTokenAndLoadWebViewTask task = new GetRequestTokenAndLoadWebViewTask();
 
         task.execute();
     }
 
     private void startGetAccessTokenTask(){
-        AsyncTask task = new AsyncTask() {
-            private OAuth1AccessToken accessToken = null;
-
-            @Override
-            protected Object doInBackground(Object[] params) {
-                try {
-                    accessToken = Util.getService().getAccessToken(requestToken, verifier);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Object o) {
-                if(accessToken != null) {
-                    PlurkOAuthUserInfo.setAccessToken(mActivity, accessToken);
-                    Util.plurkOAuthTokenChanged();
-                    finish();
-                }
-            }
-        };
+        GetAccessTokenTask task = new GetAccessTokenTask();
 
         task.execute();
     }
@@ -207,5 +156,48 @@ public class AuthorizeActivity extends BaseActivity {
         deviceName = deviceName.replace(" ", "+");
 
         return deviceName;
+    }
+
+    private class GetRequestTokenAndLoadWebViewTask extends AsyncTask{
+        @Override
+        protected String doInBackground(Object[] params) {
+            String url = "";
+            try {
+                requestToken = Util.getService().getRequestToken();
+                url = obtainAuthURL();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return url;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            if(o.getClass().getSimpleName().equals(String.class.getSimpleName())){
+                webView.loadUrl((String)o);
+            }
+        }
+    }
+
+    private class GetAccessTokenTask extends AsyncTask{
+        @Override
+        protected Object doInBackground(Object[] params) {
+            OAuth1AccessToken accessToken = null;
+            try {
+                accessToken = Util.getService().getAccessToken(requestToken, verifier);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return accessToken;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            if(o.getClass().getSimpleName().equals(OAuth1AccessToken.class.getSimpleName()) && o != null) {
+                PlurkOAuthUserInfo.setAccessToken(AuthorizeActivity.this, (OAuth1AccessToken)o);
+                Util.plurkOAuthTokenChanged();
+                finish();
+            }
+        }
     }
 }

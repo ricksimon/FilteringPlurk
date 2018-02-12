@@ -69,7 +69,13 @@ import org.json.JSONObject;
  * }
  */
 
-public class PlurkBean {
+public class PlurkBean extends BaseBean {
+
+    @Override
+    public void setBeanType() {
+        setBeanType(PlurkBean.class.getSimpleName());
+    }
+
     public enum IsUnread{
         READ(0),
         UNREAD(1),
@@ -358,7 +364,7 @@ public class PlurkBean {
     }
 
     private PlurkBean(){
-
+        setBeanType();
     }
 
     public static PlurkBean parsePlurkBean(JSONObject jsonObject) throws JSONException {

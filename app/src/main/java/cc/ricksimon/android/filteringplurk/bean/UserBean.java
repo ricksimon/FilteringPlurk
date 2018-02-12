@@ -76,7 +76,13 @@ import org.json.JSONObject;
  * }
  */
 
-public class UserBean {
+public class UserBean extends BaseBean {
+
+    @Override
+    public void setBeanType() {
+        setBeanType(UserBean.class.getSimpleName());
+    }
+
     public enum BDayPrivacy{
         HIDE_BIRTHDAY(0),
         SHOW_ONLY_DAY_MONTH(1),
@@ -495,6 +501,7 @@ public class UserBean {
     }
 
     private UserBean(){
+        setBeanType();
     }
 
     public static UserBean parseSimpleUserBean(JSONObject jsonObject) throws JSONException {
