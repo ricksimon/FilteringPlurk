@@ -131,7 +131,7 @@ public class UserBean extends BaseBean {
     private static final String KEY_AVATAR = "avatar";
     private static final String KEY_LOCATION = "location";
     private static final String KEY_DEFAULT_LANG = "default_lang";
-    private static final String KEY_DATE_OF_BIRTH = "date_of_birthday";
+    private static final String KEY_DATE_OF_BIRTH = "date_of_birth";
     private static final String KEY_BDAY_PRIVACY = "bday_privacy";
     private static final String KEY_FULL_NAME = "full_name";
     private static final String KEY_GENDER = "gender";
@@ -560,7 +560,58 @@ public class UserBean extends BaseBean {
         return res;
     }
     public static UserBean parseFullUserBean(JSONObject jsonObject) throws JSONException {
+        UserBean res = UserBean.parseUserBean(jsonObject);
+        if(jsonObject.has(KEY_AVATAR_SMALL)){
+            res.setAvatarSmall(jsonObject.getString(KEY_AVATAR_SMALL));
+        }
+        if(jsonObject.has(KEY_AVATAR_MEDIUM)){
+            res.setAvatarMedium(jsonObject.getString(KEY_AVATAR_MEDIUM));
+        }
+        if(jsonObject.has(KEY_AVATAR_BIG)){
+            res.setAvatarBig(jsonObject.getString(KEY_AVATAR_BIG));
+        }
+
+        if(jsonObject.has(KEY_DATE_OF_BIRTH)){
+            res.setDateOfBirth(jsonObject.getString(KEY_DATE_OF_BIRTH));
+        }
+
+        if(jsonObject.has(KEY_PLURKS_COUNT)){
+            res.setPlurksCount(jsonObject.getInt(KEY_PLURKS_COUNT));
+        }
+        if(jsonObject.has(KEY_RESPONSE_COUNT)){
+            res.setResponseCount(jsonObject.getInt(KEY_RESPONSE_COUNT));
+        }
+        if(jsonObject.has(KEY_FRIENDS_COUNT)){
+            res.setFriendsCount(jsonObject.getInt(KEY_FRIENDS_COUNT));
+        }
+        if(jsonObject.has(KEY_FANS_COUNT)){
+            res.setFansCount(jsonObject.getInt(KEY_FANS_COUNT));
+        }
+        if(jsonObject.has(KEY_RECRUITED)){
+            res.setRecruited(jsonObject.getInt(KEY_RECRUITED));
+        }
+        if(jsonObject.has(KEY_PROFILE_VIEWS)){
+            res.setProfileViews(jsonObject.getInt(KEY_PROFILE_VIEWS));
+        }
+
+        if(jsonObject.has(KEY_ABOUT)){
+            res.setAbout(jsonObject.getString(KEY_ABOUT));
+        }
+
         //TODO: parse more value
-        return UserBean.parseUserBean(jsonObject);
+
+        return res;
+    }
+
+    public String getGenderString(){
+        switch (gender){
+            case 0:
+                return "Female";
+            case 1:
+                return "Male";
+            case 2:
+            default:
+                return "Unknown";
+        }
     }
 }

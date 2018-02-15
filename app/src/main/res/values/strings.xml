@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">FilteringPlurk</string>
+
+    <!-- Strings for User profile  -->
+    <string name="avatar_description">User Avatar</string>
+    <string name="item_name">Name</string>
+    <string name="item_value">Value</string>
+    <string name="name_display_name">Display Name</string>
+    <string name="name_nickname">Nickname</string>
+    <string name="name_full_name">Full Name</string>
+    <string name="name_birthday">Birthday</string>
+    <string name="name_location">Location</string>
+    <string name="name_gender">Gender</string>
+    <string name="name_karma">Karma</string>
+    <string name="name_plurk_count">Plurk Count</string>
+    <string name="name_response_count">Response Count</string>
+    <string name="name_friend_count">Friend Count</string>
+    <string name="name_fans_count">Fans Count</string>
+    <string name="name_invited_count">Invite Friend count</string>
+    <string name="name_profile_view">Profile Views</string>
+    <string name="name_about">About Me</string>
 </resources>
