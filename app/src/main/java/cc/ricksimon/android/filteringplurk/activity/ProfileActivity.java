@@ -1,6 +1,7 @@
 package cc.ricksimon.android.filteringplurk.activity;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -17,6 +18,7 @@ public class ProfileActivity extends BaseActivity {
 
     public static final String TAG = ProfileActivity.class.getSimpleName();
 
+    private ActionBar actionBar = null;
     private ImageView ivAvatar = null;
     private ListView lvUserProfile = null;
 
@@ -61,6 +63,11 @@ public class ProfileActivity extends BaseActivity {
 
         adapter = new ProfileDetailListAdapter(ProfileActivity.this);
         lvUserProfile.setAdapter(adapter);
+
+        actionBar = getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setTitle(R.string.title_user_profile);
+        }
 
         hideViews();
     }

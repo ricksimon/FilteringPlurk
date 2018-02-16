@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
@@ -36,6 +37,7 @@ public class AuthorizeActivity extends BaseActivity {
 
     private AuthorizeActivity mActivity = null;
     private WebView webView = null;
+    private ActionBar actionBar = null;
 
     private static final boolean withDetailInfo = true;
 
@@ -64,6 +66,11 @@ public class AuthorizeActivity extends BaseActivity {
     private void setUpView(){
         webView.setVisibility(View.INVISIBLE);
         setContentView(R.layout.progress_dialog);
+
+        actionBar = getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setTitle(R.string.title_user_profile);
+        }
     }
 
     private void initWebView(){

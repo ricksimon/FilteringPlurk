@@ -2,6 +2,7 @@
     <string name="app_name">FilteringPlurk</string>
 
     <!-- Strings for User profile  -->
+    <string name="title_user_profile">User Profile</string>
     <string name="avatar_description">User Avatar</string>
     <string name="item_name">Name</string>
     <string name="item_value">Value</string>

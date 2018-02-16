@@ -82,26 +82,26 @@ public class ProfileDetailListAdapter extends BaseAdapter {
         }
         cells.clear();
 
-        cells.add(new ProfileDetailDataCell(getStringByResId(R.string.name_display_name)    , userBean.getDisplayName()));
-        cells.add(new ProfileDetailDataCell(getStringByResId(R.string.name_nickname)        , userBean.getNickName()));
-        cells.add(new ProfileDetailDataCell(getStringByResId(R.string.name_full_name)       , userBean.getFullName()));
-        cells.add(new ProfileDetailDataCell(getStringByResId(R.string.name_birthday)        , userBean.getDateOfBirth()));
-        cells.add(new ProfileDetailDataCell(getStringByResId(R.string.name_location)        , userBean.getLocation()));
-        cells.add(new ProfileDetailDataCell(getStringByResId(R.string.name_gender)          , userBean.getGenderString()));
+        cells.add(new ProfileDetailDataCell(getString(R.string.name_display_name)    , userBean.getDisplayName()));
+        cells.add(new ProfileDetailDataCell(getString(R.string.name_nickname)        , userBean.getNickName()));
+        cells.add(new ProfileDetailDataCell(getString(R.string.name_full_name)       , userBean.getFullName()));
+        cells.add(new ProfileDetailDataCell(getString(R.string.name_birthday)        , userBean.getDateOfBirth()));
+        cells.add(new ProfileDetailDataCell(getString(R.string.name_location)        , userBean.getLocation()));
+        cells.add(new ProfileDetailDataCell(getString(R.string.name_gender)          , userBean.getGenderString()));
 
-        cells.add(new ProfileDetailDataCell(getStringByResId(R.string.name_karma)           , String.valueOf(userBean.getKarma())));
-        cells.add(new ProfileDetailDataCell(getStringByResId(R.string.name_plurk_count)     , String.valueOf(userBean.getPlurksCount())));
-        cells.add(new ProfileDetailDataCell(getStringByResId(R.string.name_response_count)  , String.valueOf(userBean.getResponseCount())));
+        cells.add(new ProfileDetailDataCell(getString(R.string.name_karma)           , String.valueOf(userBean.getKarma())));
+        cells.add(new ProfileDetailDataCell(getString(R.string.name_plurk_count)     , String.valueOf(userBean.getPlurksCount())));
+        cells.add(new ProfileDetailDataCell(getString(R.string.name_response_count)  , String.valueOf(userBean.getResponseCount())));
 
-        cells.add(new ProfileDetailDataCell(getStringByResId(R.string.name_friend_count)    , String.valueOf(userBean.getFriendsCount())));
-        cells.add(new ProfileDetailDataCell(getStringByResId(R.string.name_fans_count)      , String.valueOf(userBean.getFansCount())));
-        cells.add(new ProfileDetailDataCell(getStringByResId(R.string.name_invited_count)   , String.valueOf(userBean.getRecruited())));
-        cells.add(new ProfileDetailDataCell(getStringByResId(R.string.name_profile_view)    , String.valueOf(userBean.getProfileViews())));
+        cells.add(new ProfileDetailDataCell(getString(R.string.name_friend_count)    , String.valueOf(userBean.getFriendsCount())));
+        cells.add(new ProfileDetailDataCell(getString(R.string.name_fans_count)      , String.valueOf(userBean.getFansCount())));
+        cells.add(new ProfileDetailDataCell(getString(R.string.name_invited_count)   , String.valueOf(userBean.getRecruited())));
+        cells.add(new ProfileDetailDataCell(getString(R.string.name_profile_view)    , String.valueOf(userBean.getProfileViews())));
 
-        cells.add(new ProfileDetailDataCell(getStringByResId(R.string.name_about), userBean.getAbout()));
+        cells.add(new ProfileDetailDataCell(getString(R.string.name_about)           , userBean.getAbout()));
     }
 
-    private String getStringByResId(int resId){
+    private String getString(int resId){
         if(context == null){
             return "";
         }
@@ -110,8 +110,6 @@ public class ProfileDetailListAdapter extends BaseAdapter {
     }
 
     private static class ViewHolder{
-        ImageView ivAvatar;
-
         TextView tvName;
         TextView tvValue;
     }
