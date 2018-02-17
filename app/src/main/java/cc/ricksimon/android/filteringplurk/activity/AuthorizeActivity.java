@@ -69,7 +69,7 @@ public class AuthorizeActivity extends BaseActivity {
 
         actionBar = getSupportActionBar();
         if(actionBar != null) {
-            actionBar.setTitle(R.string.title_user_profile);
+            actionBar.setTitle(R.string.title_authorization);
         }
     }
 

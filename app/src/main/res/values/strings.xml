@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">FilteringPlurk</string>
 
+    <!-- String for Authorization Page -->
+    <string name="title_authorization">Request Authorize</string>
+
     <!-- Strings for User profile  -->
     <string name="title_user_profile">User Profile</string>
     <string name="avatar_description">User Avatar</string>
@@ -20,4 +23,9 @@
     <string name="name_invited_count">Invite Friend count</string>
     <string name="name_profile_view">Profile Views</string>
     <string name="name_about">About Me</string>
+
+    <!-- Strings for List Plurks-->
+    <string name="title_plurks">Plurks</string>
+    <string name="item_count">Count</string>
+    <string name="item_content">Content</string>
 </resources>

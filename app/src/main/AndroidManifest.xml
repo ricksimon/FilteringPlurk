@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.LandingActivity"
+        <activity
+            android:name=".activity.LandingActivity"
             android:theme="@style/NoActionBarTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,6 +23,7 @@
         </activity>
         <activity android:name=".activity.AuthorizeActivity" />
         <activity android:name=".activity.ProfileActivity" />
+        <activity android:name=".activity.ListPlurkActivity"></activity>
     </application>
 
 </manifest>

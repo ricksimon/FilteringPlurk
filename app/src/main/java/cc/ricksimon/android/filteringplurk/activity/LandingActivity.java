@@ -66,7 +66,8 @@ public class LandingActivity extends BaseActivity {
                 try {
                     if(TokenBean.parseTokenBean((JSONObject) o).isValid(LandingActivity.this)){
                         //TODO: go timeline page
-                        startActivity(new Intent( LandingActivity.this, ProfileActivity.class));
+//                        startActivity(new Intent( LandingActivity.this, ProfileActivity.class));
+                        startActivity(new Intent( LandingActivity.this, ListPlurkActivity.class));
                         finish();
                         return;
                     }
