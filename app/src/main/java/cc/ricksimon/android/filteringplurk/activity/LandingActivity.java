@@ -10,8 +10,12 @@ import com.google.jplurk_oauth.module.OAuthUtilities;
 import org.json.JSONObject;
 
 import cc.ricksimon.android.filteringplurk.R;
+import cc.ricksimon.android.filteringplurk.bean.BaseBean;
 import cc.ricksimon.android.filteringplurk.bean.TokenBean;
+import cc.ricksimon.android.filteringplurk.bean.UserBean;
+import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthCallback;
 import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthUserInfo;
+import cc.ricksimon.android.filteringplurk.utils.Log;
 import cc.ricksimon.android.filteringplurk.utils.Util;
 
 public class LandingActivity extends BaseActivity {
@@ -65,10 +69,22 @@ public class LandingActivity extends BaseActivity {
             if(o != null && o.getClass().getSimpleName().equals(JSONObject.class.getSimpleName())){
                 try {
                     if(TokenBean.parseTokenBean((JSONObject) o).isValid(LandingActivity.this)){
-                        //TODO: go timeline page
-//                        startActivity(new Intent( LandingActivity.this, ProfileActivity.class));
-                        startActivity(new Intent( LandingActivity.this, ListPlurkActivity.class));
-                        finish();
+                        getUserProfile(new PlurkOAuthCallback() {
+                            @Override
+                            public void onAPICallBack(BaseBean dataBean) {
+                                if(dataBean == null){
+                                    Log.e(TAG,"getUserProfile-dataBean is null");
+                                }else if(dataBean instanceof UserBean){
+                                    Util.setUserProfile(LandingActivity.this,(UserBean) dataBean);
+                                }
+
+                                //TODO: go timeline page
+//                                startActivity(new Intent( LandingActivity.this, ProfileActivity.class));
+//                                startActivity(new Intent( LandingActivity.this, ListPlurkActivity.class));
+                                startActivity(new Intent( LandingActivity.this, EditPlurkActivity.class));
+                                finish();
+                            }
+                        });
                         return;
                     }
                 }catch (Exception e){

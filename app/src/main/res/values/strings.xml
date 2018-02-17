@@ -28,4 +28,35 @@
     <string name="title_plurks">Plurks</string>
     <string name="item_count">Count</string>
     <string name="item_content">Content</string>
+
+    <!-- Strings for Edit Plurk-->
+    <string name="btn_plurk">Plurk!</string>
+    <string-array name="plurk_verbs">
+        <item>:</item>
+        <item>freestyle</item>
+        <item>says</item>
+        <item>is</item>
+        <item>likes</item>
+        <item>sells</item>
+        <item>thinks</item>
+        <item>needs</item>
+        <item>draws</item>
+        <item>asks</item>
+        <item>writes</item>
+        <item>shares</item>
+        <item>buys</item>
+        <item>has</item>
+        <item>was</item>
+        <item>hates</item>
+        <item>gives</item>
+        <item>wants</item>
+        <item>feels</item>
+        <item>wishes</item>
+        <item>hopes</item>
+        <item>plays</item>
+        <item>eats</item>
+        <item>will</item>
+        <item>loves</item>
+        <item>wonders</item>
+    </string-array>
 </resources>

@@ -13,6 +13,7 @@ import cc.ricksimon.android.filteringplurk.bean.UserBean;
 import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthCallback;
 import cc.ricksimon.android.filteringplurk.utils.GetImageFromWebTask;
 import cc.ricksimon.android.filteringplurk.utils.Log;
+import cc.ricksimon.android.filteringplurk.utils.Util;
 
 public class ProfileActivity extends BaseActivity {
 
@@ -37,24 +38,34 @@ public class ProfileActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
-        getUserProfile(new PlurkOAuthCallback() {
-            @Override
-            public void onAPICallBack(BaseBean dataBean) {
-                if(dataBean == null){
-                    Log.e(TAG,"dataBean is null");
-                    return;
-                }
+        UserBean userBean = Util.getUserProfile(ProfileActivity.this);
 
-                if(dataBean instanceof UserBean){
-                    UserBean ub = (UserBean) dataBean;
+        if(userBean != null){
+            Log.i(TAG,"data from shared preference");
+            setUpProfileData(userBean);
+        }else {
+            Log.i(TAG,"data from API call");
+            getUserProfile(new PlurkOAuthCallback() {
+                @Override
+                public void onAPICallBack(BaseBean dataBean) {
+                    if (dataBean == null) {
+                        Log.e(TAG, "dataBean is null");
+                        return;
+                    }
 
-                    adapter.setProfileDetail(ub);
-                    task = new GetImageFromWebTask(ivAvatar, ub.getAvatarBig());
-                    task.execute();
-                    showViews();
+                    if (dataBean instanceof UserBean) {
+                        setUpProfileData((UserBean) dataBean);
+                    }
                 }
-            }
-        });
+            });
+        }
+    }
+
+    private void setUpProfileData(UserBean userBean){
+        adapter.setProfileDetail(userBean);
+        task = new GetImageFromWebTask(ivAvatar, Util.getAvatarUrl(Util.TYPE_BIG,userBean));
+        task.execute();
+        showViews();
     }
 
     private void initView(){

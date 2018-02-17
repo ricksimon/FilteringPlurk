@@ -74,7 +74,13 @@ public enum Qualifier {
     DRAWS("draws"),
 
     // "writes" 寫
-    WRITES("writes");
+    WRITES("writes"),
+
+    SELLS("sells"),
+
+    BUYS("buys"),
+
+    EATS("eats");
 
     private static final String TAG = Qualifier.class.getSimpleName();
 

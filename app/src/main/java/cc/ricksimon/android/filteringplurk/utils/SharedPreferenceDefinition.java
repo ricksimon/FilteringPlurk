@@ -11,4 +11,6 @@ public class SharedPreferenceDefinition {
     public static final String KEY_USER_TOKEN_SECRET = "userTokenSecret";
 
     public static final String KEY_UUID = "UUID";
+
+    public static final String KEY_USER_PROFILE = "userProfile";
 }

@@ -1,9 +1,11 @@
 package cc.ricksimon.android.filteringplurk.utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.oauth.OAuth10aService;
+import com.google.gson.Gson;
 import com.google.jplurk_oauth.skeleton.PlurkOAuth;
 
 import cc.ricksimon.android.filteringplurk.bean.UserBean;
@@ -60,6 +62,30 @@ public class Util {
         PlurkOAuth.clearCachedModule();
     }
 
+    //Set/Get User Basic Profile
+    public static void setUserProfile(Context context, UserBean userBean){
+        SharedPreferences s = context.getSharedPreferences(SharedPreferenceDefinition.SHARED_PREFERENCE_ROOT,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = s.edit();
+
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(userBean);
+        editor.putString(SharedPreferenceDefinition.KEY_USER_PROFILE,jsonString);
+
+        editor.commit();
+    }
+    public static UserBean getUserProfile(Context context){
+        SharedPreferences s = context.getSharedPreferences(SharedPreferenceDefinition.SHARED_PREFERENCE_ROOT,Context.MODE_PRIVATE);
+
+        String jsonString = s.getString(SharedPreferenceDefinition.KEY_USER_PROFILE,null);
+        if(jsonString == null){
+            return null;
+        }
+
+        Gson gson = new Gson();
+        UserBean userBean = gson.fromJson(jsonString,UserBean.class);
+
+        return userBean;
+    }
 
     //Logic for get avatar URL
     public static final int TYPE_SMALL = 0;
