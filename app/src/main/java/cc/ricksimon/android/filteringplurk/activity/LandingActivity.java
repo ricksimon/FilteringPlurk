@@ -80,8 +80,8 @@ public class LandingActivity extends BaseActivity {
 
                                 //TODO: go timeline page
 //                                startActivity(new Intent( LandingActivity.this, ProfileActivity.class));
-//                                startActivity(new Intent( LandingActivity.this, ListPlurkActivity.class));
-                                startActivity(new Intent( LandingActivity.this, EditPlurkActivity.class));
+                                startActivity(new Intent( LandingActivity.this, PlurkListActivity.class));
+//                                startActivity(new Intent( LandingActivity.this, EditPlurkActivity.class));
                                 finish();
                             }
                         });

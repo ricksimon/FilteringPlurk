@@ -10,15 +10,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
 
 import cc.ricksimon.android.filteringplurk.R;
+import cc.ricksimon.android.filteringplurk.activity.PlurkListActivity;
 import cc.ricksimon.android.filteringplurk.bean.PlurkBean;
 import cc.ricksimon.android.filteringplurk.bean.TimeLineBean;
 import cc.ricksimon.android.filteringplurk.bean.UserBean;
 import cc.ricksimon.android.filteringplurk.utils.GetImageFromWebTask;
-import cc.ricksimon.android.filteringplurk.utils.Log;
 import cc.ricksimon.android.filteringplurk.utils.Util;
 
 /**
@@ -33,9 +31,11 @@ public class PlurkListAdapter extends BaseAdapter {
     private LayoutInflater inflater = null;
     private ArrayList<PlurkBean> plurks = null;
     private HashMap<String,UserBean> users = null;
+    private View.OnClickListener onClickListener = null;
 
-    public PlurkListAdapter(Context context){
+    public PlurkListAdapter(Context context, View.OnClickListener onClickListener){
         this.context = context;
+        this.onClickListener = onClickListener;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         plurks = new ArrayList<PlurkBean>();
         users = new HashMap<String,UserBean>();
@@ -80,6 +80,7 @@ public class PlurkListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parentView) {
         ViewHolder viewHolder;
+        PlurkListActivity.EditPlurkData editPlurkData = null;
 
         if(convertView == null){
             viewHolder = new ViewHolder();
@@ -90,20 +91,36 @@ public class PlurkListAdapter extends BaseAdapter {
             viewHolder.tvResponseCount = convertView.findViewById(R.id.tvResponseCount);
             viewHolder.tvContent = convertView.findViewById(R.id.tvContent);
 
-            convertView.setTag(viewHolder);
+            convertView.setTag(R.id.TAG_VIEW_HOLDER,viewHolder);
+
         }else{
-            viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder = (ViewHolder) convertView.getTag(R.id.TAG_VIEW_HOLDER);
+            editPlurkData = (PlurkListActivity.EditPlurkData) convertView.getTag(R.id.TAG_PLURK_EDIT_DATA);
         }
 
-        UserBean user = users.get(String.valueOf(getItem(position).getUserId()));
+        PlurkBean plurkBean = getItem(position);
+        UserBean user = users.get(String.valueOf(plurkBean.getUserId()));
+
+        if(editPlurkData == null ){
+            editPlurkData = new PlurkListActivity.EditPlurkData();
+        }
+        if(editPlurkData.isEmpty()){
+            editPlurkData.plurkContent = plurkBean.getContentRaw();
+            editPlurkData.plurkVerb = plurkBean.getQualifier();
+            editPlurkData.plurkId = plurkBean.getPlurkId();
+
+            convertView.setTag(R.id.TAG_PLURK_EDIT_DATA,editPlurkData);
+        }
 
         GetImageFromWebTask task = new GetImageFromWebTask(viewHolder.ivAvatar, Util.getAvatarUrl(Util.TYPE_MEDIUM,user));
         task.execute();
 
         viewHolder.tvDisplayName.setText(user.getDisplayName());
 
-        viewHolder.tvResponseCount.setText(String.valueOf(getItem(position).getResponseCount()));
-        viewHolder.tvContent.setText(getItem(position).getContent());
+        viewHolder.tvResponseCount.setText(String.valueOf(plurkBean.getResponseCount()));
+        viewHolder.tvContent.setText(plurkBean.getContent());
+
+        convertView.setOnClickListener(onClickListener);
 
         return convertView;
     }

@@ -15,6 +15,7 @@ public class StatusBean extends BaseBean{
     }
 
     public static final String KEY_ERROR_TEXT = "error_text";
+    public static final String KEY_SUCCESS_TEXT = "success_text";
 
     private String message = null;
     private boolean isSuccess = false;
@@ -43,6 +44,9 @@ public class StatusBean extends BaseBean{
         if(jsonObject.has(KEY_ERROR_TEXT)){
             res.setMessage(jsonObject.getString(KEY_ERROR_TEXT));
             res.setSuccess(false);
+        }else if(jsonObject.has(KEY_SUCCESS_TEXT)){
+            res.setMessage(jsonObject.getString(KEY_SUCCESS_TEXT));
+            res.setSuccess(true);
         }
 
         return res;

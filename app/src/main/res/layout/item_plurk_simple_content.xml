@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="cc.ricksimon.android.filteringplurk.activity.ListPlurkActivity">
+    tools:context="cc.ricksimon.android.filteringplurk.activity.PlurkListActivity">
 
     <ImageView
         android:id="@+id/ivAvatar"

@@ -30,6 +30,8 @@
     <string name="item_content">Content</string>
 
     <!-- Strings for Edit Plurk-->
+    <string name="title_create_plurk">Say Something&#8230;</string>
+    <string name="title_edit_plurk">Edit&#8230;</string>
     <string name="btn_plurk">Plurk!</string>
     <string-array name="plurk_verbs">
         <item>:</item>

@@ -30,6 +30,10 @@ public class BaseActivity extends AppCompatActivity {
 
     public static final String TAG = BaseActivity.class.getSimpleName();
 
+    public static final String EXTRA_PLURK_ID = "plurk_id";
+    public static final String EXTRA_PLURK_CONTENT = "plurk_content";
+    public static final String EXTRA_PLURK_VERB = "plurk_verb";
+
     public void getUserProfile(final PlurkOAuthCallback callback){
         AsyncTask task = new AsyncTask() {
             @Override
@@ -66,10 +70,10 @@ public class BaseActivity extends AppCompatActivity {
             protected TimeLineBean doInBackground(Object[] objects) {
                 TimeLineBean timeLineBean = null;
                 try {
-//                    Args args = new Args();
-//                    args.add("filter","my");
-//                    JSONObject jsonObject = Util.getAuth(BaseActivity.this).using(Timeline.class).getPlurks(args);
-                    JSONObject jsonObject = Util.getAuth(BaseActivity.this).using(Timeline.class).getPlurks();
+                    Args args = new Args();
+                    args.add("filter","my");
+                    JSONObject jsonObject = Util.getAuth(BaseActivity.this).using(Timeline.class).getPlurks(args);
+//                    JSONObject jsonObject = Util.getAuth(BaseActivity.this).using(Timeline.class).getPlurks();
                     Log.e(TAG,jsonObject.toString());
 
                     timeLineBean = TimeLineBean.parseTimeLineBean(jsonObject);
@@ -119,24 +123,58 @@ public class BaseActivity extends AppCompatActivity {
                 super.onPostExecute(o);
 
                 if(o != null && o.getClass().getSimpleName().equals(JSONObject.class.getSimpleName())){
-                    BaseBean baseBean = null;
-                    JSONObject jsonObject = (JSONObject) o;
-                    if(jsonObject.has(StatusBean.KEY_ERROR_TEXT)){
-                        try {
-                            baseBean = StatusBean.parseStatusBean(jsonObject);
-                        } catch (Exception e) {
-                        }
-                    }else{
-                        try{
-                            baseBean = PlurkBean.parseFullPlurkBean(jsonObject);
-                        } catch (Exception e){
-                        }
+                    try {
+                        callback.onAPICallBack(parseCreateEditPlurkResult((JSONObject) o));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.e(TAG,"create plurk failed");
                     }
-                    callback.onAPICallBack(baseBean);
                 }
             }
         };
 
         task.execute();
+    }
+
+    public void editPlurk(final PlurkOAuthCallback callback,final String content, final long plurkId){
+        AsyncTask task = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = Util.getAuth(BaseActivity.this).using(Timeline.class).plurkEdit(plurkId,content);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                return jsonObject;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+
+                if(o != null && o.getClass().getSimpleName().equals(JSONObject.class.getSimpleName())){
+                    try {
+                        callback.onAPICallBack(parseCreateEditPlurkResult((JSONObject) o));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.e(TAG,"edit plurk failed");
+                    }
+                }
+            }
+        };
+
+        task.execute();
+    }
+
+    private BaseBean parseCreateEditPlurkResult(JSONObject jsonObject) throws Exception{
+        BaseBean baseBean = null;
+        if(jsonObject.has(StatusBean.KEY_ERROR_TEXT)){
+            baseBean = StatusBean.parseStatusBean(jsonObject);
+        }else{
+            baseBean = PlurkBean.parseFullPlurkBean(jsonObject);
+        }
+        return baseBean;
     }
 }

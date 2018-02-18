@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import cc.ricksimon.android.filteringplurk.R;
+import cc.ricksimon.android.filteringplurk.activity.BaseActivity;
 import cc.ricksimon.android.filteringplurk.bean.UserBean;
 
 /**
@@ -64,9 +65,9 @@ public class ProfileDetailListAdapter extends BaseAdapter {
             viewHolder.tvName = convertView.findViewById(R.id.tvName);
             viewHolder.tvValue = convertView.findViewById(R.id.tvValue);
 
-            convertView.setTag(viewHolder);
+            convertView.setTag(R.id.TAG_VIEW_HOLDER,viewHolder);
         }else{
-            viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder = (ViewHolder) convertView.getTag(R.id.TAG_VIEW_HOLDER);
         }
 
         viewHolder.tvName.setText(cells.get(position).getName());

@@ -11,6 +11,9 @@ http://square.github.io/okhttp/
 AndroidDeviceNames: 
 https://github.com/jaredrummler/AndroidDeviceNames
 
+Gson:
+https://github.com/google/gson
+
 httpclient:(use legacy version 3.1)
 http://hc.apache.org/downloads.cgi
 

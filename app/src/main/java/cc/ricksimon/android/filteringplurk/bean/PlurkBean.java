@@ -3,6 +3,8 @@ package cc.ricksimon.android.filteringplurk.bean;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cc.ricksimon.android.filteringplurk.utils.Log;
+
 /**
  * Created by Simon on 2017/11/3.
  */
@@ -427,7 +429,13 @@ public class PlurkBean extends BaseBean {
             res.setReplurkable(jsonObject.getBoolean(KEY_REPLURKABLE));
         }
         if(jsonObject.has(KEY_REPLURKED)){
-            res.setReplurked(jsonObject.getBoolean(KEY_REPLURKED));
+            try{
+                res.setReplurked(jsonObject.getBoolean(KEY_REPLURKED));
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("PlurkBean","exception cached");
+                res.setReplurked(false);//default false (as null)
+            }
         }
         if(jsonObject.has(KEY_REPLURKER_ID)){
             res.setReplurkerId(jsonObject.getString(KEY_REPLURKER_ID));
