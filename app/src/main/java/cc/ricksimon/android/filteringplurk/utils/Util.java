@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.github.scribejava.core.builder.ServiceBuilder;
+import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.oauth.OAuth10aService;
 import com.google.gson.Gson;
 import com.google.jplurk_oauth.skeleton.PlurkOAuth;
@@ -11,12 +12,16 @@ import com.google.jplurk_oauth.skeleton.PlurkOAuth;
 import cc.ricksimon.android.filteringplurk.bean.UserBean;
 import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthApi;
 import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthParameter;
+import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthUserInfo;
 
 /**
  * Created by Simon on 2017/11/1.
  */
 
 public class Util {
+
+    public static final String TAG = Util.class.getSimpleName();
+
     public static final long LANDING_PAGE_DELAY_TIME_MS = 1000;
 
     //OAuthService
@@ -60,6 +65,19 @@ public class Util {
         service = null;
         auth = null;
         PlurkOAuth.clearCachedModule();
+    }
+
+    //Show OAuth Token/Secret, only enable when develop
+    private static boolean showToken = false;
+    public static void showTokens(Context context){
+        if(!showToken){
+            return;
+        }
+        if(PlurkOAuthUserInfo.hasAccessToken(context)) {
+            OAuth1AccessToken t = PlurkOAuthUserInfo.getAccessToken(context);
+            Log.e(TAG,"token:"+t.getToken());
+            Log.e(TAG,"secret:"+t.getTokenSecret());
+        }
     }
 
     //Set/Get User Basic Profile

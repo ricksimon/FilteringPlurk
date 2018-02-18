@@ -3,7 +3,9 @@ package cc.ricksimon.android.filteringplurk.activity;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 
+import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.google.jplurk_oauth.Qualifier;
+import com.google.jplurk_oauth.module.Responses;
 import com.google.jplurk_oauth.module.Timeline;
 import com.google.jplurk_oauth.module.Users;
 import com.google.jplurk_oauth.skeleton.Args;
@@ -19,6 +21,7 @@ import cc.ricksimon.android.filteringplurk.bean.StatusBean;
 import cc.ricksimon.android.filteringplurk.bean.TimeLineBean;
 import cc.ricksimon.android.filteringplurk.bean.UserBean;
 import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthCallback;
+import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthUserInfo;
 import cc.ricksimon.android.filteringplurk.utils.Log;
 import cc.ricksimon.android.filteringplurk.utils.Util;
 
@@ -31,8 +34,11 @@ public class BaseActivity extends AppCompatActivity {
     public static final String TAG = BaseActivity.class.getSimpleName();
 
     public static final String EXTRA_PLURK_ID = "plurk_id";
+    public static final String EXTRA_PLURK_RESPONSES = "plurk_responses";
     public static final String EXTRA_PLURK_CONTENT = "plurk_content";
     public static final String EXTRA_PLURK_VERB = "plurk_verb";
+
+
 
     public void getUserProfile(final PlurkOAuthCallback callback){
         AsyncTask task = new AsyncTask() {
@@ -139,7 +145,7 @@ public class BaseActivity extends AppCompatActivity {
     public void editPlurk(final PlurkOAuthCallback callback,final String content, final long plurkId){
         AsyncTask task = new AsyncTask() {
             @Override
-            protected Object doInBackground(Object[] objects) {
+            protected JSONObject doInBackground(Object[] objects) {
                 JSONObject jsonObject = null;
                 try {
                     jsonObject = Util.getAuth(BaseActivity.this).using(Timeline.class).plurkEdit(plurkId,content);
@@ -176,5 +182,35 @@ public class BaseActivity extends AppCompatActivity {
             baseBean = PlurkBean.parseFullPlurkBean(jsonObject);
         }
         return baseBean;
+    }
+
+    public void getPlurkResponse(final PlurkOAuthCallback callback,final long plurkId){
+        AsyncTask task = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                try{
+//                    Args args = new Args();
+//                    args.add("minimal_data",true);
+//                    JSONObject jsonObject = Util.getAuth(BaseActivity.this).using(Responses.class).get(plurkId,args);
+                    JSONObject jsonObject = Util.getAuth(BaseActivity.this).using(Responses.class).get(plurkId);
+
+                    Log.e(TAG,jsonObject.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+
+                //TODO: trigger callback
+            }
+        };
+
+        task.execute();
+
     }
 }

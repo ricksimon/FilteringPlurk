@@ -10,24 +10,21 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 import cc.ricksimon.android.filteringplurk.R;
-import cc.ricksimon.android.filteringplurk.activity.PlurkListActivity;
 import cc.ricksimon.android.filteringplurk.bean.PlurkBean;
 import cc.ricksimon.android.filteringplurk.bean.TimeLineBean;
 import cc.ricksimon.android.filteringplurk.bean.UserBean;
 import cc.ricksimon.android.filteringplurk.utils.GetImageFromWebTask;
-import cc.ricksimon.android.filteringplurk.utils.Log;
 import cc.ricksimon.android.filteringplurk.utils.Util;
 
 /**
  * Created by Simon on 2018/2/16.
  */
 
-public class PlurkListAdapter extends BaseAdapter {
+public class PlurkDetailAdapter extends BaseAdapter {
 
-    public static final String TAG = PlurkListAdapter.class.getSimpleName();
+    public static final String TAG = PlurkDetailAdapter.class.getSimpleName();
 
     private Context context = null;
     private LayoutInflater inflater = null;
@@ -35,7 +32,7 @@ public class PlurkListAdapter extends BaseAdapter {
     private HashMap<String,UserBean> users = null;
     private View.OnClickListener onClickListener = null;
 
-    public PlurkListAdapter(Context context, View.OnClickListener onClickListener){
+    public PlurkDetailAdapter(Context context, View.OnClickListener onClickListener){
         this.context = context;
         this.onClickListener = onClickListener;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -48,7 +45,7 @@ public class PlurkListAdapter extends BaseAdapter {
         users = timeLineBean.getUsers();
 
 //        for(PlurkBean p: plurks){
-//            Log.e(TAG,"PLURK OWNER_ID:"+p.getOwnerId());
+//            Log.e(TAG,"PLURK USER_ID:"+p.getUserId());
 //        }
 //        Set<String> k = users.keySet();
 //        for(String id: k){
@@ -82,7 +79,7 @@ public class PlurkListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parentView) {
         ViewHolder viewHolder;
-        PlurkListActivity.EditPlurkData editPlurkData = null;
+//        PlurkListActivity.EditPlurkData editPlurkData = null;
 
         if(convertView == null){
             viewHolder = new ViewHolder();
@@ -98,23 +95,23 @@ public class PlurkListAdapter extends BaseAdapter {
 
         }else{
             viewHolder = (ViewHolder) convertView.getTag(R.id.TAG_VIEW_HOLDER);
-            editPlurkData = (PlurkListActivity.EditPlurkData) convertView.getTag(R.id.TAG_PLURK_EDIT_DATA);
+//            editPlurkData = (PlurkListActivity.EditPlurkData) convertView.getTag(R.id.TAG_PLURK_EDIT_DATA);
         }
 
         PlurkBean plurkBean = getItem(position);
-        UserBean user = users.get(String.valueOf(plurkBean.getOwnerId()));
+        UserBean user = users.get(String.valueOf(plurkBean.getUserId()));
 
-        if(editPlurkData == null ){
-            editPlurkData = new PlurkListActivity.EditPlurkData();
-        }
-        if(editPlurkData.isEmpty()){
-            editPlurkData.plurkContent = plurkBean.getContentRaw();
-            editPlurkData.plurkVerb = plurkBean.getQualifier();
-            editPlurkData.plurkId = plurkBean.getPlurkId();
-            editPlurkData.plurkResponses = plurkBean.getResponseCount();
-
-            convertView.setTag(R.id.TAG_PLURK_EDIT_DATA,editPlurkData);
-        }
+//        if(editPlurkData == null ){
+//            editPlurkData = new PlurkListActivity.EditPlurkData();
+//        }
+//        if(editPlurkData.isEmpty()){
+//            editPlurkData.plurkContent = plurkBean.getContentRaw();
+//            editPlurkData.plurkVerb = plurkBean.getQualifier();
+//            editPlurkData.plurkId = plurkBean.getPlurkId();
+//            editPlurkData.plurkResponses = plurkBean.getResponseCount();
+//
+//            convertView.setTag(R.id.TAG_PLURK_EDIT_DATA,editPlurkData);
+//        }
 
         GetImageFromWebTask task = new GetImageFromWebTask(viewHolder.ivAvatar, Util.getAvatarUrl(Util.TYPE_MEDIUM,user));
         task.execute();
@@ -122,7 +119,7 @@ public class PlurkListAdapter extends BaseAdapter {
         viewHolder.tvDisplayName.setText(user.getDisplayName());
 
         viewHolder.tvVerb.setText(plurkBean.getQualifier());
-        viewHolder.tvResponseCount.setText(String.valueOf(plurkBean.getResponseCount()));
+        viewHolder.tvResponseCount.setVisibility(View.GONE);
         viewHolder.tvContent.setText(plurkBean.getContent());
 
         convertView.setOnClickListener(onClickListener);

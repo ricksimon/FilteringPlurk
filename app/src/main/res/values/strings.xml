@@ -24,7 +24,7 @@
     <string name="name_profile_view">Profile Views</string>
     <string name="name_about">About Me</string>
 
-    <!-- Strings for List Plurks-->
+    <!-- Strings for Plurk List-->
     <string name="title_plurks">Plurks</string>
     <string name="item_count">Count</string>
     <string name="item_content">Content</string>
@@ -60,5 +60,19 @@
         <item>will</item>
         <item>loves</item>
         <item>wonders</item>
+    </string-array>
+
+    <!-- Strings for Plurk Detail-->
+    <string name="title_plurk_detail">Plurk Detail</string>
+    <string name="item_verb">Verb</string>
+    <string-array name="detail_functions">
+        <item>Like</item>
+        <item>Edit</item>
+        <item>Delete</item>
+        <item>Share</item>
+        <item>Bookmark</item>
+        <item>Top</item>
+        <item>Copy Link</item>
+        <item>Copy Content</item>
     </string-array>
 </resources>

@@ -67,9 +67,10 @@ public class PlurkListActivity extends BaseActivity {
             Object o = view.getTag(R.id.TAG_PLURK_EDIT_DATA);
             if(o.getClass().getSimpleName().equals(EditPlurkData.class.getSimpleName())){
                 EditPlurkData editPlurkData = (EditPlurkData) o;
-                //TODO: jump to detail page instead of edit page
-                Intent intent = new Intent(PlurkListActivity.this, EditPlurkActivity.class);
+//                Intent intent = new Intent(PlurkListActivity.this, EditPlurkActivity.class);
+                Intent intent = new Intent(PlurkListActivity.this, PlurkDetailActivity.class);
                 intent.putExtra(BaseActivity.EXTRA_PLURK_ID, editPlurkData.plurkId);
+                intent.putExtra(BaseActivity.EXTRA_PLURK_RESPONSES, editPlurkData.plurkResponses);
                 intent.putExtra(BaseActivity.EXTRA_PLURK_VERB, editPlurkData.plurkVerb);
                 intent.putExtra(BaseActivity.EXTRA_PLURK_CONTENT, editPlurkData.plurkContent);
                 startActivity(intent);
@@ -81,11 +82,12 @@ public class PlurkListActivity extends BaseActivity {
 
     public static class EditPlurkData {
         public long plurkId = -1;
+        public int plurkResponses = -1;
         public String plurkContent = null;
         public String plurkVerb = null;
 
         public boolean isEmpty(){
-            if(plurkId == -1 || plurkContent == null || !plurkContent.isEmpty() || plurkVerb == null || !plurkVerb.isEmpty()){
+            if(plurkId == -1 || plurkResponses == -1 || plurkContent == null || !plurkContent.isEmpty() || plurkVerb == null || !plurkVerb.isEmpty()){
                 return true;
             }else{
                 return false;
