@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import cc.ricksimon.android.filteringplurk.bean.BaseBean;
 import cc.ricksimon.android.filteringplurk.bean.PlurkBean;
+import cc.ricksimon.android.filteringplurk.bean.ResponseBean;
 import cc.ricksimon.android.filteringplurk.bean.StatusBean;
 import cc.ricksimon.android.filteringplurk.bean.TimeLineBean;
 import cc.ricksimon.android.filteringplurk.bean.UserBean;
@@ -187,7 +188,8 @@ public class BaseActivity extends AppCompatActivity {
     public void getPlurkResponse(final PlurkOAuthCallback callback,final long plurkId){
         AsyncTask task = new AsyncTask() {
             @Override
-            protected Object doInBackground(Object[] objects) {
+            protected ResponseBean doInBackground(Object[] objects) {
+                ResponseBean responseBean = null;
                 try{
 //                    Args args = new Args();
 //                    args.add("minimal_data",true);
@@ -195,18 +197,22 @@ public class BaseActivity extends AppCompatActivity {
                     JSONObject jsonObject = Util.getAuth(BaseActivity.this).using(Responses.class).get(plurkId);
 
                     Log.e(TAG,jsonObject.toString());
+
+                    responseBean = ResponseBean.parseResponseBean(jsonObject);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
-                return null;
+                return responseBean;
             }
 
             @Override
             protected void onPostExecute(Object o) {
                 super.onPostExecute(o);
 
-                //TODO: trigger callback
+                if(o != null && o.getClass().getSimpleName().equals(ResponseBean.class.getSimpleName())){
+                    callback.onAPICallBack((ResponseBean)o);
+                }
             }
         };
 

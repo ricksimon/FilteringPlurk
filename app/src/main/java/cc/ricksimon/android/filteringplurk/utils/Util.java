@@ -9,6 +9,7 @@ import com.github.scribejava.core.oauth.OAuth10aService;
 import com.google.gson.Gson;
 import com.google.jplurk_oauth.skeleton.PlurkOAuth;
 
+import cc.ricksimon.android.filteringplurk.bean.FriendBean;
 import cc.ricksimon.android.filteringplurk.bean.UserBean;
 import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthApi;
 import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthParameter;
@@ -141,12 +142,15 @@ public class Util {
         }
 
         if(avatarUrl == null || avatarUrl.isEmpty()){
-            avatarUrl = generateAvatarURL(type, userBean);
+            avatarUrl = generateAvatarURL(type, userBean.getId(), userBean.getHasProfileImage(), userBean.getAvatar());
         }
 
         return avatarUrl;
     }
-    private static String generateAvatarURL(int type, UserBean userBean){
+    public static String getAvatarUrl(int type, FriendBean friendBean){
+        return generateAvatarURL(type, friendBean.getId(), friendBean.getHasProfileImage(), friendBean.getAvatar());
+    }
+    private static String generateAvatarURL(int type, long id, int hasProfileImage, int avatar){
         String avatarUrl = null;
         String argSize = null;
         String argType = null;
@@ -167,10 +171,10 @@ public class Util {
                 break;
         }
 
-        if(userBean.getHasProfileImage() == 1 && userBean.getAvatar() == 0){
-            avatarUrl = AVATAR_URL_BASE+userBean.getId()+"-"+argSize+argType;
-        }else if(userBean.getHasProfileImage() == 1 && userBean.getAvatar() != 0){
-            avatarUrl = AVATAR_URL_BASE+userBean.getId()+"-"+argSize+userBean.getAvatar()+argType;
+        if(hasProfileImage == 1 && avatar == 0){
+            avatarUrl = AVATAR_URL_BASE+id+"-"+argSize+argType;
+        }else if(hasProfileImage == 1 && avatar != 0){
+            avatarUrl = AVATAR_URL_BASE+id+"-"+argSize+avatar+argType;
         }else{
             avatarUrl = AVATAR_URL_BASE+AVATAR_PATH_DEFAULT_AVATAR+argSize+AVATAR_PATH_GIF;
         }

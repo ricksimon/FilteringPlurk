@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by Simon on 2017/11/7.
+ * Created by Simon on 2018/2/17.
  */
 
 public class StatusBean extends BaseBean{

@@ -524,10 +524,10 @@ public class UserBean extends BaseBean {
         if(jsonObject.has(KEY_AVATAR)){
             try {
                 res.setAvatar(jsonObject.getInt(KEY_AVATAR));
-            }catch(Exception e){
+            }catch(Exception getIntException){
                 try{
                     res.setAvatar(Integer.parseInt(jsonObject.getString(KEY_AVATAR)));
-                }catch (Exception e2){
+                }catch (Exception parseIneException){
                     res.setAvatar(0);
                 }
             }

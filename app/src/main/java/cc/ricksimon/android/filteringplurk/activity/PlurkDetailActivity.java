@@ -13,6 +13,7 @@ import android.widget.TextView;
 import cc.ricksimon.android.filteringplurk.R;
 import cc.ricksimon.android.filteringplurk.adapter.PlurkDetailAdapter;
 import cc.ricksimon.android.filteringplurk.bean.BaseBean;
+import cc.ricksimon.android.filteringplurk.bean.ResponseBean;
 import cc.ricksimon.android.filteringplurk.bean.UserBean;
 import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthCallback;
 import cc.ricksimon.android.filteringplurk.utils.GetImageFromWebTask;
@@ -76,8 +77,11 @@ public class PlurkDetailActivity extends BaseActivity {
                     return;
                 }
 
-                //TODO: set data into lvResponses
-                Log.e(TAG,"do more thing");
+                if(dataBean instanceof ResponseBean){
+                    ResponseBean rb = (ResponseBean) dataBean;
+
+                    adapter.setPlurkList(rb);
+                }
             }
         },plurkId);
     }

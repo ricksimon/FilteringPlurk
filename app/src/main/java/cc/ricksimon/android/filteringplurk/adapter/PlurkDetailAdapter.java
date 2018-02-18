@@ -10,12 +10,17 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import cc.ricksimon.android.filteringplurk.R;
+import cc.ricksimon.android.filteringplurk.bean.FriendBean;
 import cc.ricksimon.android.filteringplurk.bean.PlurkBean;
+import cc.ricksimon.android.filteringplurk.bean.ResponseBean;
+import cc.ricksimon.android.filteringplurk.bean.ResponseContentBean;
 import cc.ricksimon.android.filteringplurk.bean.TimeLineBean;
 import cc.ricksimon.android.filteringplurk.bean.UserBean;
 import cc.ricksimon.android.filteringplurk.utils.GetImageFromWebTask;
+import cc.ricksimon.android.filteringplurk.utils.Log;
 import cc.ricksimon.android.filteringplurk.utils.Util;
 
 /**
@@ -28,43 +33,50 @@ public class PlurkDetailAdapter extends BaseAdapter {
 
     private Context context = null;
     private LayoutInflater inflater = null;
-    private ArrayList<PlurkBean> plurks = null;
-    private HashMap<String,UserBean> users = null;
+    private ArrayList<ResponseContentBean> responses = null;
+    private HashMap<String,FriendBean> friends = null;
+    private int responseCount = -1;
+    private int responsesSeen = -1;
+
     private View.OnClickListener onClickListener = null;
 
     public PlurkDetailAdapter(Context context, View.OnClickListener onClickListener){
         this.context = context;
         this.onClickListener = onClickListener;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        plurks = new ArrayList<PlurkBean>();
-        users = new HashMap<String,UserBean>();
+        responses = new ArrayList<ResponseContentBean>();
+        friends = new HashMap<String,FriendBean>();
     }
 
-    public void setPlurkList(TimeLineBean timeLineBean){
-        plurks = timeLineBean.getPlurks();
-        users = timeLineBean.getUsers();
+    public void setPlurkList(ResponseBean rb){
+        responses = rb.getResponses();
+        friends = rb.getFriends();
+        responseCount = rb.getResponseCount();
+        responsesSeen = rb.getResponsesSeen();
 
-//        for(PlurkBean p: plurks){
-//            Log.e(TAG,"PLURK USER_ID:"+p.getUserId());
+//        for(ResponseContentBean r: responses){
+//            Log.e(TAG,"PLURK USER_ID:"+r.getUserId());
 //        }
-//        Set<String> k = users.keySet();
+//        Set<String> k = friends.keySet();
 //        for(String id: k){
-//            Log.e(TAG,"USER_ID:"+users.get(id).getId());
+//            Log.e(TAG,"USER_ID:"+friends.get(id).getId());
 //        }
+//        Log.e(TAG,"response count:"+responseCount);
+//        Log.e(TAG,"responses seen:"+responsesSeen);
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return plurks.size();
+        return responses.size();
     }
 
     @Override
-    public PlurkBean getItem(int position) {
-        if(plurks.size() < position){
+    public ResponseContentBean getItem(int position) {
+        if(responses.size() < position){
             return null;
         }else{
-            return plurks.get(position);
+            return responses.get(position);
         }
 
     }
@@ -98,8 +110,8 @@ public class PlurkDetailAdapter extends BaseAdapter {
 //            editPlurkData = (PlurkListActivity.EditPlurkData) convertView.getTag(R.id.TAG_PLURK_EDIT_DATA);
         }
 
-        PlurkBean plurkBean = getItem(position);
-        UserBean user = users.get(String.valueOf(plurkBean.getUserId()));
+        ResponseContentBean responseContentBean = getItem(position);
+        FriendBean friend = friends.get(String.valueOf(responseContentBean.getUserId()));
 
 //        if(editPlurkData == null ){
 //            editPlurkData = new PlurkListActivity.EditPlurkData();
@@ -113,14 +125,14 @@ public class PlurkDetailAdapter extends BaseAdapter {
 //            convertView.setTag(R.id.TAG_PLURK_EDIT_DATA,editPlurkData);
 //        }
 
-        GetImageFromWebTask task = new GetImageFromWebTask(viewHolder.ivAvatar, Util.getAvatarUrl(Util.TYPE_MEDIUM,user));
+        GetImageFromWebTask task = new GetImageFromWebTask(viewHolder.ivAvatar, Util.getAvatarUrl(Util.TYPE_MEDIUM,friend));
         task.execute();
 
-        viewHolder.tvDisplayName.setText(user.getDisplayName());
+        viewHolder.tvDisplayName.setText(friend.getDisplayName());
 
-        viewHolder.tvVerb.setText(plurkBean.getQualifier());
+        viewHolder.tvVerb.setText(responseContentBean.getQualifier());
         viewHolder.tvResponseCount.setVisibility(View.GONE);
-        viewHolder.tvContent.setText(plurkBean.getContent());
+        viewHolder.tvContent.setText(responseContentBean.getContent());
 
         convertView.setOnClickListener(onClickListener);
 
