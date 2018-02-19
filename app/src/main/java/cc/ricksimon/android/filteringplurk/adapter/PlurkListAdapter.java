@@ -95,13 +95,13 @@ public class PlurkListAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             convertView = inflater.inflate(R.layout.item_plurk_simple_content,parentView,false);
 
-            viewHolder.ivAvatar = convertView.findViewById(R.id.ivAvatar);
-            viewHolder.tvDisplayName = convertView.findViewById(R.id.tvDisplayName);
-            viewHolder.tvVerb = convertView.findViewById(R.id.tvVerb);
-            viewHolder.tvResponseCount = convertView.findViewById(R.id.tvResponseCount);
-            viewHolder.clContentHolder = convertView.findViewById(R.id.clContentHolder);
+            viewHolder.ivAvatar = (ImageView) convertView.findViewById(R.id.ivAvatar);
+            viewHolder.tvDisplayName = (TextView) convertView.findViewById(R.id.tvDisplayName);
+            viewHolder.tvVerb = (TextView) convertView.findViewById(R.id.tvVerb);
+            viewHolder.tvResponseCount = (TextView) convertView.findViewById(R.id.tvResponseCount);
+            viewHolder.clContentHolder = (ConstraintLayout) convertView.findViewById(R.id.clContentHolder);
 //            viewHolder.tvContent = convertView.findViewById(R.id.tvContent);
-            viewHolder.wvContent = convertView.findViewById(R.id.wvContent);
+            viewHolder.wvContent = (WebView) convertView.findViewById(R.id.wvContent);
 
             convertView.setTag(R.id.TAG_VIEW_HOLDER,viewHolder);
 

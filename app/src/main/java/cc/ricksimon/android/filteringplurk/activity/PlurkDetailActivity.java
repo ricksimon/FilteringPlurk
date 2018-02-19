@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -16,6 +18,8 @@ import cc.ricksimon.android.filteringplurk.R;
 import cc.ricksimon.android.filteringplurk.adapter.PlurkDetailAdapter;
 import cc.ricksimon.android.filteringplurk.bean.BaseBean;
 import cc.ricksimon.android.filteringplurk.bean.ResponseBean;
+import cc.ricksimon.android.filteringplurk.bean.ResponseContentBean;
+import cc.ricksimon.android.filteringplurk.bean.StatusBean;
 import cc.ricksimon.android.filteringplurk.bean.UserBean;
 import cc.ricksimon.android.filteringplurk.oauth.PlurkOAuthCallback;
 import cc.ricksimon.android.filteringplurk.utils.GetImageFromWebTask;
@@ -34,6 +38,9 @@ public class PlurkDetailActivity extends BaseActivity {
     private Spinner spFunctions = null;
 
     private ListView lvResponses = null;
+
+    private EditText etResponse = null;
+    private Button btnResponse = null;
 
     private ActionBar actionBar = null;
 
@@ -101,6 +108,9 @@ public class PlurkDetailActivity extends BaseActivity {
 
         lvResponses = (ListView) findViewById(R.id.lvResponses);
 
+        etResponse = (EditText) findViewById(R.id.etResponse);
+        btnResponse = (Button) findViewById(R.id.btnResponse);
+
         actionBar = getSupportActionBar();
 
         tvDisplayName.setText(userBean.getDisplayName());
@@ -117,6 +127,9 @@ public class PlurkDetailActivity extends BaseActivity {
 
         adapter = new PlurkDetailAdapter(PlurkDetailActivity.this,onResponseClickListener);
         lvResponses.setAdapter(adapter);
+
+        etResponse.getText().clear();
+        btnResponse.setOnClickListener(getOnResponseClickListener);
 
         if(actionBar != null) {
             actionBar.setTitle(R.string.title_plurk_detail);
@@ -141,6 +154,35 @@ public class PlurkDetailActivity extends BaseActivity {
         public void onClick(View view) {
             //TODO: operate click event
             Log.e(TAG,"response clicked");
+        }
+    };
+
+    private View.OnClickListener getOnResponseClickListener = new View.OnClickListener(){
+
+        @Override
+        public void onClick(View v) {
+            String response = etResponse.getText().toString();
+            if(response.isEmpty()){
+                Log.e(TAG,"response string is empty");
+                return;
+            }
+
+            createResponse(new PlurkOAuthCallback() {
+                @Override
+                public void onAPICallBack(BaseBean dataBean) {
+                    if (dataBean == null) {
+                        Log.e(TAG, "createResponse-dataBean is null");
+                        return;
+                    }
+
+                    if (dataBean instanceof StatusBean) {
+                        Log.e(TAG, "createResponse-error, message:" + ((StatusBean) dataBean).getMessage());
+                    } else if (dataBean instanceof ResponseContentBean) {
+                        Log.e(TAG, "createResponse-success, id:" + ((ResponseContentBean) dataBean).getId());
+                        //TODO: update listview
+                    }
+                }
+            },plurkId,response,":");//TODO:fix verb
         }
     };
 }

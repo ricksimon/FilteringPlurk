@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import cc.ricksimon.android.filteringplurk.bean.BaseBean;
 import cc.ricksimon.android.filteringplurk.bean.PlurkBean;
 import cc.ricksimon.android.filteringplurk.bean.ResponseBean;
+import cc.ricksimon.android.filteringplurk.bean.ResponseContentBean;
 import cc.ricksimon.android.filteringplurk.bean.StatusBean;
 import cc.ricksimon.android.filteringplurk.bean.TimeLineBean;
 import cc.ricksimon.android.filteringplurk.bean.UserBean;
@@ -219,6 +220,47 @@ public class BaseActivity extends AppCompatActivity {
         };
 
         task.execute();
+    }
 
+    public void createResponse(final PlurkOAuthCallback callback,final long plurkId,final String content, final String verb){
+        AsyncTask task = new AsyncTask() {
+            @Override
+            protected JSONObject doInBackground(Object[] objects) {
+                JSONObject jsonObject = null;
+                try{
+                    jsonObject = Util.getAuth(BaseActivity.this).using(Responses.class).responseAdd(plurkId,content,Qualifier.fromString(verb));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return jsonObject;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+
+                if(o != null && o.getClass().getSimpleName().equals(JSONObject.class.getSimpleName())){
+                    try {
+                        callback.onAPICallBack(parseCreateEditResponseResult((JSONObject) o));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.e(TAG,"create response failed");
+                    }
+                }
+            }
+        };
+
+        task.execute();
+    }
+
+    private BaseBean parseCreateEditResponseResult(JSONObject jsonObject) throws Exception{
+        BaseBean baseBean = null;
+        if(jsonObject.has(StatusBean.KEY_ERROR_TEXT)){
+            baseBean = StatusBean.parseStatusBean(jsonObject);
+        }else{
+            baseBean = ResponseContentBean.parseResponseContentBean(jsonObject);
+        }
+        return baseBean;
     }
 }

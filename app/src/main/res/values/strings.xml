@@ -65,6 +65,7 @@
     <!-- Strings for Plurk Detail-->
     <string name="title_plurk_detail">Plurk Detail</string>
     <string name="item_verb">Verb</string>
+    <string name="btn_response">Response!</string>
     <string-array name="detail_functions">
         <item>Like</item>
         <item>Edit</item>
