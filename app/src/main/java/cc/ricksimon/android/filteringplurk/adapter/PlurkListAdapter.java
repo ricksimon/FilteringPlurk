@@ -11,6 +11,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,8 +125,10 @@ public class PlurkListAdapter extends BaseAdapter {
             convertView.setTag(R.id.TAG_PLURK_EDIT_DATA,editPlurkData);
         }
 
-        GetImageFromWebTask task = new GetImageFromWebTask(viewHolder.ivAvatar, Util.getAvatarUrl(Util.TYPE_MEDIUM,user));
-        task.execute();
+        viewHolder.ivAvatar.setTag(R.id.TAG_PLURK_USER_ID,user.getId());
+        Glide.with(context).load(Util.getAvatarUrl(Util.TYPE_MEDIUM,user)).into(viewHolder.ivAvatar);
+//        GetImageFromWebTask task = new GetImageFromWebTask(viewHolder.ivAvatar, Util.getAvatarUrl(Util.TYPE_MEDIUM,user));
+//        task.execute();
 
         viewHolder.tvDisplayName.setText(user.getDisplayName());
 

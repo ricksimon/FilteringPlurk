@@ -10,6 +10,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import cc.ricksimon.android.filteringplurk.R;
 import cc.ricksimon.android.filteringplurk.adapter.PlurkDetailAdapter;
 import cc.ricksimon.android.filteringplurk.bean.BaseBean;
@@ -106,8 +108,9 @@ public class PlurkDetailActivity extends BaseActivity {
         tvCount.setText(String.valueOf(plurkResponses));
         tvContent.setText(plurkContent);
 
-        task = new GetImageFromWebTask(ivAvatar, Util.getAvatarUrl(Util.TYPE_BIG,userBean));
-        task.execute();
+        Glide.with(PlurkDetailActivity.this).load(Util.getAvatarUrl(Util.TYPE_BIG,userBean)).into(ivAvatar);
+//        task = new GetImageFromWebTask(ivAvatar, Util.getAvatarUrl(Util.TYPE_BIG,userBean));
+//        task.execute();
 
         spFunctions.setAdapter(arrayAdapter);
         spFunctions.setOnItemSelectedListener(onItemSelectedListener);

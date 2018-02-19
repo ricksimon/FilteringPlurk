@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import cc.ricksimon.android.filteringplurk.R;
+
 /**
  * Created by Simon on 2018/2/15.
  */
@@ -18,10 +20,17 @@ public class GetImageFromWebTask extends AsyncTask <Void,Void,Bitmap>{
 
     private ImageView imageView;
     private String imageUrl;
+    private Object tag;
+    private long userId;
 
     public GetImageFromWebTask(ImageView imageView, String imageUrl){
         this.imageView = imageView;
         this.imageUrl = imageUrl;
+
+        tag = imageView.getTag(R.id.TAG_PLURK_USER_ID);
+        if(tag != null) {
+            userId = (long) tag;
+        }
     }
 
     @Override
@@ -31,6 +40,8 @@ public class GetImageFromWebTask extends AsyncTask <Void,Void,Bitmap>{
 
         if(imageUrl == null || imageUrl.isEmpty()){
             Log.e(TAG, "imageUrl invalid");
+        }else if(tag == null){
+            Log.e(TAG, "tag on view is null");
         }else {
             try {
                 URL urlImage = new URL(imageUrl);
@@ -58,6 +69,17 @@ public class GetImageFromWebTask extends AsyncTask <Void,Void,Bitmap>{
             return;
         }
 
-        imageView.setImageBitmap(bitmap);
+        if(tag == null){
+            Log.e(TAG, "tag on view is null");
+            return;
+        }
+
+        long thisUserId = (long)imageView.getTag(R.id.TAG_PLURK_USER_ID);
+        if(userId == thisUserId) {
+            Log.e(TAG,"set image:"+imageUrl);
+            imageView.setImageBitmap(bitmap);
+        } else {
+            Log.e(TAG,"user changed from "+userId+" to "+thisUserId+" , skip");
+        }
     }
 }

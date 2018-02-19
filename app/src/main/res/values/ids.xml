@@ -2,4 +2,5 @@
 <resources>
     <item name="TAG_VIEW_HOLDER" type="id"/>
     <item name="TAG_PLURK_EDIT_DATA" type="id"/>
+    <item name="TAG_PLURK_USER_ID" type="id"/>
 </resources>

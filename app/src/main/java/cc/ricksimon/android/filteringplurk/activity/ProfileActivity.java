@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.bumptech.glide.Glide;
+
 import cc.ricksimon.android.filteringplurk.R;
 import cc.ricksimon.android.filteringplurk.adapter.ProfileDetailListAdapter;
 import cc.ricksimon.android.filteringplurk.bean.BaseBean;
@@ -63,8 +65,9 @@ public class ProfileActivity extends BaseActivity {
 
     private void setUpProfileData(UserBean userBean){
         adapter.setProfileDetail(userBean);
-        task = new GetImageFromWebTask(ivAvatar, Util.getAvatarUrl(Util.TYPE_BIG,userBean));
-        task.execute();
+        Glide.with(ProfileActivity.this).load(Util.getAvatarUrl(Util.TYPE_BIG,userBean)).into(ivAvatar);
+//        task = new GetImageFromWebTask(ivAvatar, Util.getAvatarUrl(Util.TYPE_BIG,userBean));
+//        task.execute();
         showViews();
     }
 

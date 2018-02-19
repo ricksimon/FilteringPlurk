@@ -14,6 +14,9 @@ https://github.com/jaredrummler/AndroidDeviceNames
 Gson:
 https://github.com/google/gson
 
+glide:
+https://github.com/bumptech/glide
+
 httpclient:(use legacy version 3.1)
 http://hc.apache.org/downloads.cgi
 
