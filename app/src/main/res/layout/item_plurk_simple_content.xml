@@ -53,7 +53,24 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:text="@string/item_content"
+        android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivAvatar" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/clContentHolder"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="4dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivAvatar">
+
+        <WebView
+            android:id="@+id/wvContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </android.support.constraint.ConstraintLayout>
+
 </android.support.constraint.ConstraintLayout>

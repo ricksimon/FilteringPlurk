@@ -1,13 +1,17 @@
 package cc.ricksimon.android.filteringplurk.adapter;
 
 import android.content.Context;
+import android.os.Handler;
+import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -17,6 +21,7 @@ import cc.ricksimon.android.filteringplurk.activity.PlurkListActivity;
 import cc.ricksimon.android.filteringplurk.bean.PlurkBean;
 import cc.ricksimon.android.filteringplurk.bean.TimeLineBean;
 import cc.ricksimon.android.filteringplurk.bean.UserBean;
+import cc.ricksimon.android.filteringplurk.utils.ContentViewClient;
 import cc.ricksimon.android.filteringplurk.utils.GetImageFromWebTask;
 import cc.ricksimon.android.filteringplurk.utils.Log;
 import cc.ricksimon.android.filteringplurk.utils.Util;
@@ -92,7 +97,9 @@ public class PlurkListAdapter extends BaseAdapter {
             viewHolder.tvDisplayName = convertView.findViewById(R.id.tvDisplayName);
             viewHolder.tvVerb = convertView.findViewById(R.id.tvVerb);
             viewHolder.tvResponseCount = convertView.findViewById(R.id.tvResponseCount);
-            viewHolder.tvContent = convertView.findViewById(R.id.tvContent);
+            viewHolder.clContentHolder = convertView.findViewById(R.id.clContentHolder);
+//            viewHolder.tvContent = convertView.findViewById(R.id.tvContent);
+            viewHolder.wvContent = convertView.findViewById(R.id.wvContent);
 
             convertView.setTag(R.id.TAG_VIEW_HOLDER,viewHolder);
 
@@ -123,8 +130,15 @@ public class PlurkListAdapter extends BaseAdapter {
 
         viewHolder.tvVerb.setText(plurkBean.getQualifier());
         viewHolder.tvResponseCount.setText(String.valueOf(plurkBean.getResponseCount()));
-        viewHolder.tvContent.setText(plurkBean.getContent());
+//        viewHolder.tvContent.setText(plurkBean.getContent());
 
+        viewHolder.wvContent.getSettings().setJavaScriptEnabled(true);
+        viewHolder.wvContent.setWebViewClient(new ContentViewClient());
+        viewHolder.wvContent.addJavascriptInterface(
+                new ContentViewClient.GetWebViewHeightInterface(convertView,onSizeChangedListener)
+                ,"getViewHeight");
+        viewHolder.wvContent.loadData(plurkBean.getContent(),"text/html", StandardCharsets.UTF_8.name());
+        viewHolder.wvContent.setEnabled(false);
         convertView.setOnClickListener(onClickListener);
 
         return convertView;
@@ -135,6 +149,31 @@ public class PlurkListAdapter extends BaseAdapter {
         TextView tvDisplayName;
         TextView tvVerb;
         TextView tvResponseCount;
-        TextView tvContent;//TODO:convert non-text content
+        ConstraintLayout clContentHolder;
+//        TextView tvContent;
+        WebView wvContent;
     }
+
+    private ContentViewClient.OnSizeChangedListener onSizeChangedListener = new ContentViewClient.OnSizeChangedListener() {
+        @Override
+        public void onSizeChanged(final View view, final float sizeInPX) {
+            if(view == null || view.getTag(R.id.TAG_VIEW_HOLDER) == null){
+                return;
+            }
+
+            Handler handler = new Handler(context.getMainLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    ViewHolder viewHolder = (ViewHolder)view.getTag(R.id.TAG_VIEW_HOLDER);
+
+                    int h = (int)(sizeInPX * PlurkListAdapter.this.context.getResources().getDisplayMetrics().density);
+                    ViewGroup.LayoutParams layoutParams = viewHolder.clContentHolder.getLayoutParams();
+                    layoutParams.height = h;
+                    viewHolder.clContentHolder.setLayoutParams(layoutParams);
+                    view.requestLayout();
+                }
+            });
+        }
+    };
 }

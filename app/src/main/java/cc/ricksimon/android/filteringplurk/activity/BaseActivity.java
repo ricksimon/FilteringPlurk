@@ -39,7 +39,9 @@ public class BaseActivity extends AppCompatActivity {
     public static final String EXTRA_PLURK_CONTENT = "plurk_content";
     public static final String EXTRA_PLURK_VERB = "plurk_verb";
 
-
+    private void printJSONObject(String functionName,JSONObject jsonObject){
+        Log.e(TAG,"function:["+functionName+"],jsonObject:"+jsonObject.toString());
+    }
 
     public void getUserProfile(final PlurkOAuthCallback callback){
         AsyncTask task = new AsyncTask() {
@@ -48,7 +50,7 @@ public class BaseActivity extends AppCompatActivity {
                 UserBean userBean = null;
                 try{
                     JSONObject jsonObject = Util.getAuth(BaseActivity.this).using(Users.class).currUser();
-                    Log.e(TAG,jsonObject.toString());
+                    printJSONObject("getUserProfile",jsonObject);
 
                     userBean = UserBean.parseFullUserBean(jsonObject);
                 }catch(Exception e){
@@ -81,7 +83,7 @@ public class BaseActivity extends AppCompatActivity {
                     args.add("filter","my");
                     JSONObject jsonObject = Util.getAuth(BaseActivity.this).using(Timeline.class).getPlurks(args);
 //                    JSONObject jsonObject = Util.getAuth(BaseActivity.this).using(Timeline.class).getPlurks();
-                    Log.e(TAG,jsonObject.toString());
+                    printJSONObject("getPlurks",jsonObject);
 
                     timeLineBean = TimeLineBean.parseTimeLineBean(jsonObject);
                 } catch (Exception e) {
@@ -196,7 +198,7 @@ public class BaseActivity extends AppCompatActivity {
 //                    JSONObject jsonObject = Util.getAuth(BaseActivity.this).using(Responses.class).get(plurkId,args);
                     JSONObject jsonObject = Util.getAuth(BaseActivity.this).using(Responses.class).get(plurkId);
 
-                    Log.e(TAG,jsonObject.toString());
+                    printJSONObject("getPlurkResponse",jsonObject);
 
                     responseBean = ResponseBean.parseResponseBean(jsonObject);
                 } catch (Exception e) {

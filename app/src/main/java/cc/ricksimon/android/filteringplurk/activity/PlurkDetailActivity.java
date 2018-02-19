@@ -73,7 +73,7 @@ public class PlurkDetailActivity extends BaseActivity {
             @Override
             public void onAPICallBack(BaseBean dataBean) {
                 if(dataBean == null){
-                    Log.e(TAG,"dataBean is null");
+                    Log.e(TAG,"getPlurkResponse-dataBean is null");
                     return;
                 }
 
@@ -81,6 +81,9 @@ public class PlurkDetailActivity extends BaseActivity {
                     ResponseBean rb = (ResponseBean) dataBean;
 
                     adapter.setPlurkList(rb);
+
+                    plurkResponses = rb.getResponseCount();
+                    tvCount.setText(String.valueOf(plurkResponses));
                 }
             }
         },plurkId);

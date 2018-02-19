@@ -36,7 +36,7 @@ public class PlurkListActivity extends BaseActivity {
             @Override
             public void onAPICallBack(BaseBean dataBean) {
                 if(dataBean == null){
-                    Log.e(TAG,"dataBean is null");
+                    Log.e(TAG,"getPlurks-dataBean is null");
                     return;
                 }
 

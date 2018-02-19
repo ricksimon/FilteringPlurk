@@ -41,15 +41,15 @@ public class ProfileActivity extends BaseActivity {
         UserBean userBean = Util.getUserProfile(ProfileActivity.this);
 
         if(userBean != null){
-            Log.i(TAG,"data from shared preference");
+            Log.i(TAG,"userBean from shared preference");
             setUpProfileData(userBean);
         }else {
-            Log.i(TAG,"data from API call");
+            Log.i(TAG,"userBean from API call");
             getUserProfile(new PlurkOAuthCallback() {
                 @Override
                 public void onAPICallBack(BaseBean dataBean) {
                     if (dataBean == null) {
-                        Log.e(TAG, "dataBean is null");
+                        Log.e(TAG, "getUserProfile-dataBean is null");
                         return;
                     }
 

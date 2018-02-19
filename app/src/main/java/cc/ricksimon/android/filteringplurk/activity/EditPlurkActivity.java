@@ -112,14 +112,14 @@ public class EditPlurkActivity extends BaseActivity {
                         @Override
                         public void onAPICallBack(BaseBean dataBean) {
                             if (dataBean == null) {
-                                Log.e(TAG, "dataBean is null");
+                                Log.e(TAG, "editPlurk-dataBean is null");
                                 return;
                             }
 
                             if (dataBean instanceof StatusBean) {
-                                Log.e(TAG, "error, message:" + ((StatusBean) dataBean).getMessage());
+                                Log.e(TAG, "editPlurk-error, message:" + ((StatusBean) dataBean).getMessage());
                             } else if (dataBean instanceof PlurkBean) {
-                                Log.e(TAG, "success, id:" + ((PlurkBean) dataBean).getPlurkId());
+                                Log.e(TAG, "editPlurk-success, id:" + ((PlurkBean) dataBean).getPlurkId());
                                 finish();
                             }
                         }
@@ -130,15 +130,15 @@ public class EditPlurkActivity extends BaseActivity {
                     @Override
                     public void onAPICallBack(BaseBean dataBean) {
                         if (dataBean == null) {
-                            Log.e(TAG, "dataBean is null");
+                            Log.e(TAG, "createPlurk-dataBean is null");
                             return;
                         }
 
                         //TODO: show message and return to timeline
                         if (dataBean instanceof StatusBean) {
-                            Log.e(TAG, "error, message:" + ((StatusBean) dataBean).getMessage());
+                            Log.e(TAG, "createPlurk-error, message:" + ((StatusBean) dataBean).getMessage());
                         } else if (dataBean instanceof PlurkBean) {
-                            Log.e(TAG, "success, id:" + ((PlurkBean) dataBean).getPlurkId());
+                            Log.e(TAG, "createPlurk-success, id:" + ((PlurkBean) dataBean).getPlurkId());
                         }
                     }
                 }, etContent.getText().toString(), verb);

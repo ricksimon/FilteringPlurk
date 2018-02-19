@@ -1,24 +1,26 @@
 package cc.ricksimon.android.filteringplurk.adapter;
 
 import android.content.Context;
+import android.os.Handler;
+import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 import cc.ricksimon.android.filteringplurk.R;
 import cc.ricksimon.android.filteringplurk.bean.FriendBean;
-import cc.ricksimon.android.filteringplurk.bean.PlurkBean;
 import cc.ricksimon.android.filteringplurk.bean.ResponseBean;
 import cc.ricksimon.android.filteringplurk.bean.ResponseContentBean;
-import cc.ricksimon.android.filteringplurk.bean.TimeLineBean;
 import cc.ricksimon.android.filteringplurk.bean.UserBean;
+import cc.ricksimon.android.filteringplurk.utils.ContentViewClient;
 import cc.ricksimon.android.filteringplurk.utils.GetImageFromWebTask;
 import cc.ricksimon.android.filteringplurk.utils.Log;
 import cc.ricksimon.android.filteringplurk.utils.Util;
@@ -33,26 +35,28 @@ public class PlurkDetailAdapter extends BaseAdapter {
 
     private Context context = null;
     private LayoutInflater inflater = null;
+
     private ArrayList<ResponseContentBean> responses = null;
     private HashMap<String,FriendBean> friends = null;
-    private int responseCount = -1;
-    private int responsesSeen = -1;
+
+    private UserBean userBean = null;
 
     private View.OnClickListener onClickListener = null;
 
     public PlurkDetailAdapter(Context context, View.OnClickListener onClickListener){
         this.context = context;
         this.onClickListener = onClickListener;
+
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         responses = new ArrayList<ResponseContentBean>();
         friends = new HashMap<String,FriendBean>();
+
+        userBean = Util.getUserProfile(context);
     }
 
     public void setPlurkList(ResponseBean rb){
         responses = rb.getResponses();
         friends = rb.getFriends();
-        responseCount = rb.getResponseCount();
-        responsesSeen = rb.getResponsesSeen();
 
 //        for(ResponseContentBean r: responses){
 //            Log.e(TAG,"PLURK USER_ID:"+r.getUserId());
@@ -101,7 +105,9 @@ public class PlurkDetailAdapter extends BaseAdapter {
             viewHolder.tvDisplayName = convertView.findViewById(R.id.tvDisplayName);
             viewHolder.tvVerb = convertView.findViewById(R.id.tvVerb);
             viewHolder.tvResponseCount = convertView.findViewById(R.id.tvResponseCount);
-            viewHolder.tvContent = convertView.findViewById(R.id.tvContent);
+            viewHolder.clContentHolder = convertView.findViewById(R.id.clContentHolder);
+//            viewHolder.tvContent = convertView.findViewById(R.id.tvContent);
+            viewHolder.wvContent = convertView.findViewById(R.id.wvContent);
 
             convertView.setTag(R.id.TAG_VIEW_HOLDER,viewHolder);
 
@@ -132,7 +138,16 @@ public class PlurkDetailAdapter extends BaseAdapter {
 
         viewHolder.tvVerb.setText(responseContentBean.getQualifier());
         viewHolder.tvResponseCount.setVisibility(View.GONE);
-        viewHolder.tvContent.setText(responseContentBean.getContent());
+//        viewHolder.tvContent.setText(responseContentBean.getContent());
+
+        viewHolder.wvContent.getSettings().setJavaScriptEnabled(true);
+        viewHolder.wvContent.setWebViewClient(new ContentViewClient());
+        viewHolder.wvContent.addJavascriptInterface(
+                new ContentViewClient.GetWebViewHeightInterface(convertView,onSizeChangedListener)
+                ,"getViewHeight");
+        viewHolder.wvContent.loadData(responseContentBean.getContent(),"text/html", StandardCharsets.UTF_8.name());
+        viewHolder.wvContent.setEnabled(false);
+        convertView.setOnClickListener(onClickListener);
 
         convertView.setOnClickListener(onClickListener);
 
@@ -144,6 +159,31 @@ public class PlurkDetailAdapter extends BaseAdapter {
         TextView tvDisplayName;
         TextView tvVerb;
         TextView tvResponseCount;
-        TextView tvContent;//TODO:convert non-text content
+        ConstraintLayout clContentHolder;
+//        TextView tvContent;
+        WebView wvContent;
     }
+
+    private ContentViewClient.OnSizeChangedListener onSizeChangedListener = new ContentViewClient.OnSizeChangedListener() {
+        @Override
+        public void onSizeChanged(final View view, final float sizeInPX) {
+            if(view == null || view.getTag(R.id.TAG_VIEW_HOLDER) == null){
+                return;
+            }
+
+            Handler handler = new Handler(context.getMainLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    ViewHolder viewHolder = (ViewHolder)view.getTag(R.id.TAG_VIEW_HOLDER);
+
+                    int h = (int)(sizeInPX * PlurkDetailAdapter.this.context.getResources().getDisplayMetrics().density);
+                    ViewGroup.LayoutParams layoutParams = viewHolder.clContentHolder.getLayoutParams();
+                    layoutParams.height = h;
+                    viewHolder.clContentHolder.setLayoutParams(layoutParams);
+                    view.requestLayout();
+                }
+            });
+        }
+    };
 }
