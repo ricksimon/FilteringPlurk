@@ -39,6 +39,7 @@ public class PlurkDetailActivity extends BaseActivity {
 
     private ListView lvResponses = null;
 
+    private Spinner spVerb = null;
     private EditText etResponse = null;
     private Button btnResponse = null;
 
@@ -50,7 +51,10 @@ public class PlurkDetailActivity extends BaseActivity {
     private String plurkContent = null;
     private String plurkVerb = null;
 
-    private ArrayAdapter<CharSequence> arrayAdapter = null;
+    private String responseVerb = null;
+
+    private ArrayAdapter<CharSequence> plurkActionAdapter = null;
+    private ArrayAdapter<CharSequence> responseVerbAdapter = null;
     private PlurkDetailAdapter adapter = null;
     private GetImageFromWebTask task = null;
 
@@ -65,11 +69,17 @@ public class PlurkDetailActivity extends BaseActivity {
         plurkContent = getIntent().getStringExtra(BaseActivity.EXTRA_PLURK_CONTENT);
         plurkVerb = getIntent().getStringExtra(BaseActivity.EXTRA_PLURK_VERB);
 
-        arrayAdapter = ArrayAdapter.createFromResource(
+        plurkActionAdapter = ArrayAdapter.createFromResource(
                 PlurkDetailActivity.this,
                 R.array.detail_functions,
                 android.R.layout.simple_spinner_item);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        plurkActionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        responseVerbAdapter = ArrayAdapter.createFromResource(
+                PlurkDetailActivity.this,
+                R.array.plurk_verbs,
+                android.R.layout.simple_spinner_item);
+        responseVerbAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         initView();
     }
@@ -108,6 +118,7 @@ public class PlurkDetailActivity extends BaseActivity {
 
         lvResponses = (ListView) findViewById(R.id.lvResponses);
 
+        spVerb = (Spinner)findViewById(R.id.spVerb);
         etResponse = (EditText) findViewById(R.id.etResponse);
         btnResponse = (Button) findViewById(R.id.btnResponse);
 
@@ -122,11 +133,15 @@ public class PlurkDetailActivity extends BaseActivity {
 //        task = new GetImageFromWebTask(ivAvatar, Util.getAvatarUrl(Util.TYPE_BIG,userBean));
 //        task.execute();
 
-        spFunctions.setAdapter(arrayAdapter);
+        spFunctions.setAdapter(plurkActionAdapter);
         spFunctions.setOnItemSelectedListener(onItemSelectedListener);
 
         adapter = new PlurkDetailAdapter(PlurkDetailActivity.this,onResponseClickListener);
         lvResponses.setAdapter(adapter);
+
+        spVerb.setAdapter(responseVerbAdapter);
+        spVerb.setOnItemSelectedListener(onItemSelectedListener);
+        spVerb.setSelection(0);
 
         etResponse.getText().clear();
         btnResponse.setOnClickListener(getOnResponseClickListener);
@@ -139,13 +154,31 @@ public class PlurkDetailActivity extends BaseActivity {
     private AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            //TODO: run function here
-            Log.e(TAG,"Action:"+arrayAdapter.getItem(position).toString());
+            switch (parent.getId()){
+                case R.id.spVerb:
+                    responseVerb = responseVerbAdapter.getItem(position).toString();
+                    break;
+                case R.id.spFunctions:
+                    //TODO: run function here
+                    Log.e(TAG,"Action:"+ plurkActionAdapter.getItem(position).toString());
+                    break;
+                default:
+                    break;
+            }
+
         }
 
         @Override
         public void onNothingSelected(AdapterView<?> parent) {
-
+            switch (parent.getId()){
+                case R.id.spVerb:
+                    spVerb.setSelection(0);
+                    break;
+                case R.id.spFunctions:
+                default:
+                    //skip
+                    break;
+            }
         }
     };
 
@@ -182,7 +215,7 @@ public class PlurkDetailActivity extends BaseActivity {
                         //TODO: update listview
                     }
                 }
-            },plurkId,response,":");//TODO:fix verb
+            },plurkId,response,responseVerb);
         }
     };
 }
