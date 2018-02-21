@@ -1,5 +1,6 @@
 package cc.ricksimon.android.filteringplurk.activity;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.view.View;
@@ -69,6 +70,7 @@ public class PlurkDetailActivity extends BaseActivity {
         plurkContent = getIntent().getStringExtra(BaseActivity.EXTRA_PLURK_CONTENT);
         plurkVerb = getIntent().getStringExtra(BaseActivity.EXTRA_PLURK_VERB);
 
+        //TODO:check user owns this plurk or not
         plurkActionAdapter = ArrayAdapter.createFromResource(
                 PlurkDetailActivity.this,
                 R.array.detail_functions,
@@ -133,15 +135,17 @@ public class PlurkDetailActivity extends BaseActivity {
 //        task = new GetImageFromWebTask(ivAvatar, Util.getAvatarUrl(Util.TYPE_BIG,userBean));
 //        task.execute();
 
+        //set position before set listener for avoid jump to first action
         spFunctions.setAdapter(plurkActionAdapter);
+        spFunctions.setSelection(0);
         spFunctions.setOnItemSelectedListener(onItemSelectedListener);
 
         adapter = new PlurkDetailAdapter(PlurkDetailActivity.this,onResponseClickListener);
         lvResponses.setAdapter(adapter);
 
         spVerb.setAdapter(responseVerbAdapter);
-        spVerb.setOnItemSelectedListener(onItemSelectedListener);
         spVerb.setSelection(0);
+        spVerb.setOnItemSelectedListener(onItemSelectedListener);
 
         etResponse.getText().clear();
         btnResponse.setOnClickListener(getOnResponseClickListener);
@@ -149,6 +153,15 @@ public class PlurkDetailActivity extends BaseActivity {
         if(actionBar != null) {
             actionBar.setTitle(R.string.title_plurk_detail);
         }
+    }
+
+    private void goEditPlurkPage(){
+        //TODO: double check user owns this plurk or not
+        Intent intent = new Intent(PlurkDetailActivity.this, EditPlurkActivity.class);
+        intent.putExtra(BaseActivity.EXTRA_PLURK_ID, plurkId);
+        intent.putExtra(BaseActivity.EXTRA_PLURK_VERB, plurkVerb);
+        intent.putExtra(BaseActivity.EXTRA_PLURK_CONTENT, plurkContent);
+        startActivity(intent);
     }
 
     private AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
@@ -159,8 +172,14 @@ public class PlurkDetailActivity extends BaseActivity {
                     responseVerb = responseVerbAdapter.getItem(position).toString();
                     break;
                 case R.id.spFunctions:
-                    //TODO: run function here
-                    Log.e(TAG,"Action:"+ plurkActionAdapter.getItem(position).toString());
+                    String action = plurkActionAdapter.getItem(position).toString();
+                    if(action.equals("Edit")){
+                        //TODO: not to use hardcode string resource
+                        goEditPlurkPage();
+                    }else{
+                        //TODO: run other functions
+                        Log.e(TAG,"Action:"+ plurkActionAdapter.getItem(position).toString());
+                    }
                     break;
                 default:
                     break;

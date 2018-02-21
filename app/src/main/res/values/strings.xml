@@ -67,8 +67,9 @@
     <string name="item_verb">Verb</string>
     <string name="btn_response">Response!</string>
     <string-array name="detail_functions">
-        <item>Like</item>
+        <item>Action&#8230;</item>
         <item>Edit</item>
+        <item>Like</item>
         <item>Delete</item>
         <item>Share</item>
         <item>Bookmark</item>
